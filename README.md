@@ -4,7 +4,7 @@ Local-first product knowledge base system for SKU-level ecommerce knowledge accu
 
 This repository is a monorepo with two parts:
 
-- `skill/`: instructions for Codex-like agents that initialize and maintain product knowledge repositories.
+- `skills/`: Codex-discoverable skills for initialization, accumulation, and maintenance.
 - `template/`: a copyable product knowledge repository template with source files, validation scripts, exports, and an optional local FastAPI service.
 
 Product knowledge is treated as a version-controlled business asset. YAML, JSON, Markdown, and media manifests are the source of truth. SQLite indexes and exported contexts are derived artifacts that can be rebuilt.
@@ -41,10 +41,11 @@ The system starts with customer support QA, but the same files can support listi
 
 ## Skill And Plugin Packaging
 
-The canonical skill lives in `skill/SKILL.md`. The Codex plugin manifest in `.codex-plugin/plugin.json` points at the standard `skills/` plugin directory, where `skills/product-kb-system/SKILL.md` is only a thin compatibility entrypoint. Do not duplicate skill content inside plugin metadata.
+`skills/` is the only skill directory. The Codex plugin manifest in `.codex-plugin/plugin.json` points there directly. Do not create a separate `skill/` folder; it creates needless ambiguity.
 
 Current skill split:
 
+- `$product-kb-system`: broad entrypoint and cross-cutting references.
 - `$product-kb-init`: initialize a repo from `template/`, install uv dependencies, validate the example, and start the optional API.
 - `$product-kb-accumulate`: turn source material into SPU/SKU YAML, Markdown modules, golden QA, and media manifests.
 - `$product-kb-update`: maintain facts, claims, variants, media, exports, indexes, and API behavior without editing derived artifacts as source truth.
