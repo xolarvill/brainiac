@@ -5,10 +5,11 @@ This repository stores product knowledge as version-controlled source files.
 ## Directory Rules
 
 - `products/` contains one folder per product.
-- `sources/` stores raw or lightly processed source material.
+- `products/<product_id>/raw/` stores raw or lightly processed source material for that product.
 - `indexes/` stores derived SQLite/search indexes.
 - `exports/` stores derived agent contexts and channel snippets.
 - `api/` exposes an optional local service over the same source files.
+- `ACCESS.md` explains how consuming agents should read this repository.
 
 ## Product Modeling
 
@@ -19,7 +20,7 @@ This repository stores product knowledge as version-controlled source files.
 
 ## Source Intake
 
-Prefer `sources/<product-slug>/` for raw materials tied to one product. Use subfolders such as `supplier-docs`, `competitor-pages`, `customer-reviews`, `customer-support`, `interview-notes`, and `media-inbox`.
+Prefer `products/<product_id>/raw/` for raw materials tied to one product. Use subfolders such as `supplier-docs`, `competitor-pages`, `customer-reviews`, `customer-support`, `interview-notes`, and `media-inbox`.
 
 Read source files from disk. Do not ask users to paste large raw documents into chat. If a source is missing, write the gap in `source-notes.md`.
 

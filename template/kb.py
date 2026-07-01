@@ -21,6 +21,14 @@ REQUIRED_PRODUCT_FILES = [
     "golden-qa.yaml",
     "media/media.yaml",
 ]
+RAW_SOURCE_DIRS = [
+    "raw/supplier-docs",
+    "raw/competitor-pages",
+    "raw/customer-reviews",
+    "raw/customer-support",
+    "raw/interview-notes",
+    "raw/media-inbox",
+]
 MARKDOWN_MODULES = [
     "faq.md",
     "objections.md",

@@ -10,34 +10,37 @@ YAML, Markdown, media manifests, and source files are the source of truth. Index
 - `products/<product_id>/variants.yaml`: SKU-level facts.
 - `products/<product_id>/*.md`: human-readable knowledge modules.
 - `products/<product_id>/media/media.yaml`: media asset manifest.
+- `products/<product_id>/raw/`: raw source files for that product.
 - `schemas/`: JSON schemas used by validation.
 - `scripts/`: local maintenance, validation, indexing, and export scripts.
 - `api/`: optional FastAPI service.
 - `indexes/`: derived search indexes.
 - `exports/`: derived contexts for agents and channels.
+- `ACCESS.md`: instructions for agents that consume the knowledge base.
 
 ## Raw Source Intake
 
-Put raw materials in `sources/<product-slug>/` and pass Codex the path. Do not paste long supplier docs, reviews, transcripts, or competitor pages into the chat window.
+Put raw materials in `products/<product_id>/raw/` and pass Codex the path. Do not paste long supplier docs, reviews, transcripts, or competitor pages into the chat window.
 
 Recommended layout:
 
 ```text
-sources/
+products/
   orthopedic-dog-bed/
-    supplier-docs/
-    competitor-pages/
-    customer-reviews/
-    customer-support/
-    interview-notes/
-    media-inbox/
+    raw/
+      supplier-docs/
+      competitor-pages/
+      customer-reviews/
+      customer-support/
+      interview-notes/
+      media-inbox/
 ```
 
 Examples:
 
 ```text
-$product-kb-accumulate ingest sources/orthopedic-dog-bed into products/orthopedic-dog-bed
-$product-kb-update update ODB-GREY-L using sources/orthopedic-dog-bed/supplier-docs/2026-size-sheet.pdf
+$product-kb-accumulate ingest products/orthopedic-dog-bed/raw into products/orthopedic-dog-bed
+$product-kb-update update ODB-GREY-L using products/orthopedic-dog-bed/raw/supplier-docs/2026-size-sheet.pdf
 ```
 
 After Codex reads the source files, durable facts should be written into `products/<product_id>/`. Keep unresolved or weak evidence in `source-notes.md`.

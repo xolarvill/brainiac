@@ -15,7 +15,7 @@ Use this reference for cross-cutting product knowledge tasks that do not fit onl
 - Never invent unsupported product claims.
 - Never make medical, veterinary, legal, or compliance claims unless backed by source files.
 - Record missing information in `source-notes.md` instead of fabricating.
-- Keep raw source material on disk under `sources/<product-slug>/`; do not use chat history as the source store.
+- Keep raw source material on disk under `products/<product_id>/raw/`; do not use chat history as the source store.
 
 ## Product Model
 
@@ -30,7 +30,7 @@ Use this reference for cross-cutting product knowledge tasks that do not fit onl
 Use this product-scoped layout:
 
 ```text
-sources/<product-slug>/
+products/<product_id>/raw/
   supplier-docs/
   competitor-pages/
   customer-reviews/

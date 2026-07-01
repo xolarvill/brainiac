@@ -10,7 +10,7 @@ Turn source folders into source-backed product knowledge files. Do not ask the u
 ## Workflow
 
 1. Read `AGENT.md` in the product knowledge repo.
-2. Locate raw materials under `sources/<product-slug>/`. If the user pasted a large dump into chat, ask them to save it under `sources/<product-slug>/` and provide the path.
+2. Locate raw materials under `products/<product_id>/raw/`. If the user pasted a large dump into chat, ask them to save it there and provide the path.
 3. Create a product folder when needed:
 
 ```bash
@@ -42,7 +42,7 @@ UV_CACHE_DIR=.uv-cache uv run python scripts/check_conflicts.py
 - Product-wide facts go in `product.yaml`.
 - SKU-specific dimensions, colors, weight ranges, package facts, and media refs go in `variants.yaml`.
 - Claims and boundaries go in `product.yaml` and `compliance.md`.
-- Raw source files go in `sources/<product-slug>/`; unresolved evidence and human judgment go in `source-notes.md`.
+- Raw source files go in `products/<product_id>/raw/`; unresolved evidence and human judgment go in `source-notes.md`.
 - Media files stay under `media/`; agents consume asset IDs and transcripts.
 
 ## Claim Rules

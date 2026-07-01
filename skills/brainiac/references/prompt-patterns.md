@@ -6,7 +6,7 @@ Use these patterns when a user asks for a reusable instruction or agent handoff.
 
 Create a new product knowledge folder for `<product-slug>`.
 
-Use source documents from `sources/`, fill structured product and variant facts first, then write Markdown modules. Do not invent unsupported claims. Add unresolved questions to `source-notes.md`. Run validation before finishing.
+Use source documents from `products/<product_id>/raw/`, fill structured product and variant facts first, then write Markdown modules. Do not invent unsupported claims. Add unresolved questions to `source-notes.md`. Run validation before finishing.
 
 ## Update Variant
 

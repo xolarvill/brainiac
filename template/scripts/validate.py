@@ -9,7 +9,7 @@ from jsonschema import Draft202012Validator
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from kb import REQUIRED_PRODUCT_FILES, load_yaml, product_dirs
+from kb import RAW_SOURCE_DIRS, REQUIRED_PRODUCT_FILES, load_yaml, product_dirs
 
 
 def validate_schema(data: object, schema_path: Path) -> list[str]:
@@ -23,6 +23,9 @@ def validate_product(folder: Path) -> list[str]:
     for name in REQUIRED_PRODUCT_FILES:
         if not (folder / name).exists():
             errors.append(f"{folder.name}: missing {name}")
+    for name in RAW_SOURCE_DIRS:
+        if not (folder / name).is_dir():
+            errors.append(f"{folder.name}: missing raw source directory {name}")
 
     schema_map = {
         "product.yaml": "product.schema.json",

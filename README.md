@@ -55,17 +55,18 @@ $product-kb-init initialize this folder as a Brainiac product knowledge repo
 
 Then place raw materials on disk, not in the Codex chat window. The chat should contain the task and paths only.
 
-Recommended raw source layout:
+Recommended product folder layout:
 
 ```text
-sources/
+products/
   orthopedic-dog-bed/
-    supplier-docs/
-    competitor-pages/
-    customer-reviews/
-    customer-support/
-    interview-notes/
-    media-inbox/
+    raw/
+      supplier-docs/
+      competitor-pages/
+      customer-reviews/
+      customer-support/
+      interview-notes/
+      media-inbox/
 ```
 
 Drop supplier PDFs, copied product specs, review exports, support transcripts, interview notes, competitor page captures, image files, video files, and transcript drafts into those folders. For large webpages or PDFs, save them as files first. Do not paste long source dumps into chat unless the source is tiny.
@@ -73,7 +74,7 @@ Drop supplier PDFs, copied product specs, review exports, support transcripts, i
 Then ask Codex:
 
 ```text
-$product-kb-accumulate ingest sources/orthopedic-dog-bed into products/orthopedic-dog-bed
+$product-kb-accumulate ingest products/orthopedic-dog-bed/raw into products/orthopedic-dog-bed
 ```
 
 Codex should read the source files from disk, extract facts, and write the source of truth into:
@@ -89,11 +90,19 @@ products/orthopedic-dog-bed/media/media.yaml
 Use chat for judgment and direction:
 
 ```text
-$product-kb-update update ODB-GREY-L dimensions from sources/orthopedic-dog-bed/supplier-docs/2026-size-sheet.pdf
-$product-kb-update add the new washing limitation from sources/orthopedic-dog-bed/customer-support/june-tickets.md
+$product-kb-update update ODB-GREY-L dimensions from products/orthopedic-dog-bed/raw/supplier-docs/2026-size-sheet.pdf
+$product-kb-update add the new washing limitation from products/orthopedic-dog-bed/raw/customer-support/june-tickets.md
 ```
 
 Brainiac's job is to grill raw source folders into durable product knowledge files. It should not treat the conversation context as the knowledge store.
+
+## Agent Access
+
+Potential consuming agents should start with `template/ACCESS.md` after a repo is initialized.
+
+- Direct file agents read `products/<product_id>/product.yaml`, `variants.yaml`, Markdown modules, `golden-qa.yaml`, and `media/media.yaml`.
+- API agents call `/products`, `/products/{product_id}`, `/products/{product_id}/variants`, `/products/{product_id}/media`, `/context/*`, and `/search`.
+- Neither type should treat `products/<product_id>/raw/` as official product knowledge. Raw files are evidence for maintenance and accumulation.
 
 ## Skill And Plugin Packaging
 
