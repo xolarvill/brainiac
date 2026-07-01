@@ -9,8 +9,8 @@
 7. Run:
 
 ```bash
-python scripts/validate.py
-python scripts/check_conflicts.py
+uv run python scripts/validate.py
+uv run python scripts/check_conflicts.py
 ```
 
 Never silently weaken claim boundaries to make copy easier.

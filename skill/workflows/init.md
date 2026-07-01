@@ -6,8 +6,9 @@
 4. Run:
 
 ```bash
-python scripts/validate.py
-pytest
+uv sync --extra dev
+uv run python scripts/validate.py
+uv run pytest
 ```
 
 5. Commit the initialized source files.

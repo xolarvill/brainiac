@@ -24,13 +24,13 @@ Product knowledge is treated as a version-controlled business asset. YAML, JSON,
 
 ```bash
 cd template
-python scripts/new_product.py orthopedic-dog-bed
-python scripts/validate.py
-python scripts/check_conflicts.py
-python scripts/build_index.py
-python scripts/export_support_context.py
-uvicorn api.main:app --reload --port 8710
-pytest
+uv run python scripts/new_product.py orthopedic-dog-bed
+uv run python scripts/validate.py
+uv run python scripts/check_conflicts.py
+uv run python scripts/build_index.py
+uv run python scripts/export_support_context.py
+uv run uvicorn api.main:app --reload --port 8710
+uv run pytest
 ```
 
 ## Agent Use

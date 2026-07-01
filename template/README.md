@@ -19,22 +19,22 @@ YAML, Markdown, media manifests, and source files are the source of truth. Index
 ## Setup
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev]"
+uv sync --extra dev
 ```
 
 ## Common Commands
 
 ```bash
-python scripts/new_product.py orthopedic-dog-bed
-python scripts/validate.py
-python scripts/check_conflicts.py
-python scripts/build_index.py
-python scripts/export_support_context.py
-uvicorn api.main:app --reload --port 8710
-pytest
+uv run python scripts/new_product.py orthopedic-dog-bed
+uv run python scripts/validate.py
+uv run python scripts/check_conflicts.py
+uv run python scripts/build_index.py
+uv run python scripts/export_support_context.py
+uv run uvicorn api.main:app --reload --port 8710
+uv run pytest
 ```
+
+The scripts also work as plain `python scripts/...` commands inside an activated uv-managed environment.
 
 ## Agent Guidance
 
@@ -45,7 +45,7 @@ Agents should read `AGENT.md` before editing. Update structured facts before Mar
 Start the API:
 
 ```bash
-uvicorn api.main:app --reload --port 8710
+uv run uvicorn api.main:app --reload --port 8710
 ```
 
 Example request:

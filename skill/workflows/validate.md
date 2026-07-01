@@ -3,9 +3,9 @@
 Run:
 
 ```bash
-python scripts/validate.py
-python scripts/check_conflicts.py
-pytest
+uv run python scripts/validate.py
+uv run python scripts/check_conflicts.py
+uv run pytest
 ```
 
 Validation should check schemas, required files, media references, transcript files, and claim conflicts.

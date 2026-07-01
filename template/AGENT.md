@@ -44,15 +44,15 @@ This repository stores product knowledge as version-controlled source files.
 ## Commands
 
 ```bash
-python scripts/new_product.py orthopedic-dog-bed
-python scripts/new_variant.py example-orthopedic-dog-bed ODB-GREY-S --size S --color Grey --length-cm 60 --width-cm 45 --height-cm 14 --min-weight-kg 3 --max-weight-kg 8
-python scripts/validate.py
-python scripts/check_conflicts.py
-python scripts/build_index.py
-python scripts/export_support_context.py
-python scripts/export_shopify.py
-uvicorn api.main:app --reload --port 8710
-pytest
+uv run python scripts/new_product.py orthopedic-dog-bed
+uv run python scripts/new_variant.py example-orthopedic-dog-bed ODB-GREY-S --size S --color Grey --length-cm 60 --width-cm 45 --height-cm 14 --min-weight-kg 3 --max-weight-kg 8
+uv run python scripts/validate.py
+uv run python scripts/check_conflicts.py
+uv run python scripts/build_index.py
+uv run python scripts/export_support_context.py
+uv run python scripts/export_shopify.py
+uv run uvicorn api.main:app --reload --port 8710
+uv run pytest
 ```
 
 ## Safe Changes

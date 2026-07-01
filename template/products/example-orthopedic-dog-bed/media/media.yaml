@@ -16,7 +16,7 @@ assets:
     alt_text: Grey medium orthopedic dog bed with raised edges and washable cover.
     source: supplier
     license_status: approved
-    last_reviewed: 2026-07-01
+    last_reviewed: "2026-07-01"
 
   - asset_id: img_grey_l_main
     type: image
@@ -36,7 +36,7 @@ assets:
     alt_text: Grey orthopedic dog bed with raised edges and washable cover.
     source: supplier
     license_status: approved
-    last_reviewed: 2026-07-01
+    last_reviewed: "2026-07-01"
 
   - asset_id: img_grey_xl_main
     type: image
@@ -55,7 +55,7 @@ assets:
     alt_text: Grey extra large orthopedic dog bed with washable cover.
     source: supplier
     license_status: approved
-    last_reviewed: 2026-07-01
+    last_reviewed: "2026-07-01"
 
   - asset_id: img_size_chart
     type: image
@@ -72,7 +72,7 @@ assets:
     alt_text: Size chart for orthopedic dog bed variants.
     source: internal
     license_status: approved
-    last_reviewed: 2026-07-01
+    last_reviewed: "2026-07-01"
 
   - asset_id: video_washing_demo
     type: video
@@ -86,4 +86,4 @@ assets:
     transcript_path: media/transcripts/washing-demo.md
     source: internal
     license_status: approved
-    last_reviewed: 2026-07-01
+    last_reviewed: "2026-07-01"
