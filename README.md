@@ -1,6 +1,6 @@
-# Product KB System
+# Brainiac
 
-Local-first product knowledge base system for SKU-level ecommerce knowledge accumulation and AI-agent consumption.
+Local-first product knowledge base for SKU-level ecommerce knowledge accumulation and AI-agent consumption.
 
 This repository is a monorepo with two parts:
 
@@ -46,13 +46,13 @@ The system starts with customer support QA, but the same files can support listi
 Marketplace install:
 
 ```bash
-codex plugin marketplace add xolarvill/product-kb-system --ref main
-codex plugin add product-kb-system@product-kb-system
+codex plugin marketplace add xolarvill/brainiac --ref main
+codex plugin add brainiac@brainiac
 ```
 
 Current skill split:
 
-- `$product-kb-system`: broad entrypoint and cross-cutting references.
+- `$brainiac`: broad entrypoint and cross-cutting references.
 - `$product-kb-init`: initialize a repo from `template/`, install uv dependencies, validate the example, and start the optional API.
 - `$product-kb-accumulate`: turn source material into SPU/SKU YAML, Markdown modules, golden QA, and media manifests.
 - `$product-kb-update`: maintain facts, claims, variants, media, exports, indexes, and API behavior without editing derived artifacts as source truth.

@@ -1,9 +1,9 @@
 ---
-name: product-kb-system
+name: brainiac
 description: Initialize and maintain local-first ecommerce product knowledge repositories for SKU-level AI-agent consumption. Use for product knowledge repo setup, ingestion, validation, export, and maintenance workflows.
 ---
 
-# Product KB System
+# Brainiac
 
 This is the broad Codex plugin entrypoint. Prefer the narrower skills:
 

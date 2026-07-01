@@ -1,12 +1,12 @@
 {
-  "name": "product-kb-system",
+  "name": "brainiac",
   "version": "0.1.0",
   "description": "Local-first ecommerce product knowledge workflows and repository template.",
   "author": {
     "name": "victor"
   },
-  "homepage": "https://github.com/xolarvill/product-kb-system",
-  "repository": "https://github.com/xolarvill/product-kb-system",
+  "homepage": "https://github.com/xolarvill/brainiac",
+  "repository": "https://github.com/xolarvill/brainiac",
   "license": "MIT",
   "keywords": [
     "product-knowledge",
@@ -16,7 +16,7 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Product KB System",
+    "displayName": "Brainiac",
     "shortDescription": "Local-first SKU product knowledge workflows for AI agents.",
     "longDescription": "Initialize and maintain version-controlled ecommerce product knowledge repositories with YAML, Markdown, media manifests, validation, exports, and an optional local API.",
     "developerName": "victor",
@@ -25,7 +25,7 @@
       "Write",
       "Research"
     ],
-    "websiteURL": "https://github.com/xolarvill/product-kb-system",
+    "websiteURL": "https://github.com/xolarvill/brainiac",
     "defaultPrompt": [
       "Initialize a local product knowledge repository from the template.",
       "Use $product-kb-accumulate to add source-backed SKU-level product knowledge.",

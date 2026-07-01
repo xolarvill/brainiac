@@ -1,13 +1,13 @@
 {
-  "name": "product-kb-system",
+  "name": "brainiac",
   "interface": {
-    "displayName": "Product KB System"
+    "displayName": "Brainiac"
   },
   "plugins": [
     {
-      "name": "product-kb-system",
+      "name": "brainiac",
       "interface": {
-        "displayName": "Product KB System",
+        "displayName": "Brainiac",
         "shortDescription": "Local-first SKU product knowledge workflows for AI agents.",
         "longDescription": "Initialize and maintain version-controlled ecommerce product knowledge repositories with YAML, Markdown, media manifests, validation, exports, and an optional local API.",
         "developerName": "victor",
@@ -16,12 +16,12 @@
           "Write",
           "Research"
         ],
-        "websiteURL": "https://github.com/xolarvill/product-kb-system",
+        "websiteURL": "https://github.com/xolarvill/brainiac",
         "brandColor": "#111827"
       },
       "source": {
         "source": "url",
-        "url": "https://github.com/xolarvill/product-kb-system.git",
+        "url": "https://github.com/xolarvill/brainiac.git",
         "ref": "main"
       },
       "policy": {

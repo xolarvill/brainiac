@@ -1,0 +1,4 @@
+interface:
+  display_name: "Brainiac"
+  short_description: "Local-first product knowledge for agents"
+  default_prompt: "Use $brainiac to initialize, accumulate, or maintain a local ecommerce product knowledge repository."

@@ -1,5 +1,5 @@
 [project]
-name = "product-kb-system"
+name = "brainiac"
 version = "0.1.0"
 description = "Local-first SKU-level ecommerce product knowledge base template and Codex skill."
 requires-python = ">=3.11"
