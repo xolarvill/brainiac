@@ -1,0 +1,36 @@
+{
+  "name": "product-kb-system",
+  "version": "0.1.0",
+  "description": "Local-first ecommerce product knowledge workflows and repository template.",
+  "author": {
+    "name": "victor"
+  },
+  "homepage": "https://github.com/xolarvill/product-kb-system",
+  "repository": "https://github.com/xolarvill/product-kb-system",
+  "license": "MIT",
+  "keywords": [
+    "product-knowledge",
+    "ecommerce",
+    "sku",
+    "codex-skills"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Product KB System",
+    "shortDescription": "Local-first SKU product knowledge workflows for AI agents.",
+    "longDescription": "Initialize and maintain version-controlled ecommerce product knowledge repositories with YAML, Markdown, media manifests, validation, exports, and an optional local API.",
+    "developerName": "victor",
+    "category": "Productivity",
+    "capabilities": [
+      "Write",
+      "Research"
+    ],
+    "websiteURL": "https://github.com/xolarvill/product-kb-system",
+    "defaultPrompt": [
+      "Initialize a local product knowledge repository from the template.",
+      "Add a new SKU-level product knowledge entry.",
+      "Validate and export customer-support context from this product knowledge repo."
+    ],
+    "brandColor": "#111827"
+  }
+}

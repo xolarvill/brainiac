@@ -38,3 +38,9 @@ uv run pytest
 On first use, copy `template/` into a new product knowledge repository. Future agents should read `AGENT.md`, update structured facts first, keep source notes separate from official knowledge, run validation, and rebuild derived artifacts when needed.
 
 The system starts with customer support QA, but the same files can support listing, SEO, ad copy, content, and media pipeline agents.
+
+## Skill And Plugin Packaging
+
+The canonical skill lives in `skill/SKILL.md`. The Codex plugin manifest in `.codex-plugin/plugin.json` points at the standard `skills/` plugin directory, where `skills/product-kb-system/SKILL.md` is only a thin compatibility entrypoint. Do not duplicate skill content inside plugin metadata.
+
+For local plugin development, update this repository, reinstall or refresh the plugin in Codex, then start a new thread so Codex reloads the skill metadata.
