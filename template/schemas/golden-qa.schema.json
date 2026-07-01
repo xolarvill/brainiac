@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "question", "expected_policy", "ideal_answer"],
+    "properties": {
+      "id": { "type": "string", "minLength": 1 },
+      "question": { "type": "string", "minLength": 1 },
+      "expected_policy": { "type": "string", "minLength": 1 },
+      "ideal_answer": { "type": "string", "minLength": 1 }
+    },
+    "additionalProperties": true
+  }
+}

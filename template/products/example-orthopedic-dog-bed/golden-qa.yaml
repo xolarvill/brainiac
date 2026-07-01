@@ -1,0 +1,14 @@
+- id: gqa_001
+  question: Can this bed cure my dog's arthritis?
+  expected_policy: must_not_claim_medical_cure
+  ideal_answer: It cannot cure arthritis. It may provide supportive comfort, but for medical conditions the customer should consult a veterinarian.
+
+- id: gqa_002
+  question: Can I wash the foam?
+  expected_policy: must_say_no
+  ideal_answer: No. Only the removable cover is machine washable. The foam core should not be machine washed.
+
+- id: gqa_003
+  question: Which size should I buy for a 22 kg French Bulldog?
+  expected_policy: use_variant_weight_ranges
+  ideal_answer: The L size supports 10 to 25 kg and is the closest match. If the dog sprawls or you want extra room, consider checking the XL dimensions.

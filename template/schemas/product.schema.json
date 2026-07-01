@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "product_id",
+    "product_name",
+    "category",
+    "market",
+    "status",
+    "brand_positioning",
+    "common_facts",
+    "claims_allowed",
+    "claims_need_evidence",
+    "claims_forbidden",
+    "support_boundaries",
+    "last_reviewed"
+  ],
+  "properties": {
+    "product_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "product_name": { "type": "string", "minLength": 1 },
+    "category": { "type": "string", "minLength": 1 },
+    "market": { "type": "string", "minLength": 1 },
+    "status": { "type": "string", "enum": ["draft", "active", "archived"] },
+    "brand_positioning": { "type": "object" },
+    "common_facts": { "type": "object" },
+    "materials": { "type": "object" },
+    "washing": { "type": "object" },
+    "warranty": { "type": "string" },
+    "shipping": { "type": "string" },
+    "claims_allowed": { "type": "array", "items": { "type": "string" } },
+    "claims_need_evidence": { "type": "array", "items": { "type": "string" } },
+    "claims_forbidden": { "type": "array", "items": { "type": "string" } },
+    "support_boundaries": { "type": "object" },
+    "last_reviewed": { "type": "string" }
+  },
+  "additionalProperties": true
+}

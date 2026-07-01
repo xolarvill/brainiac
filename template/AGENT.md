@@ -1,0 +1,65 @@
+# Agent Operating Manual
+
+This repository stores product knowledge as version-controlled source files.
+
+## Directory Rules
+
+- `products/` contains one folder per product.
+- `sources/` stores raw or lightly processed source material.
+- `indexes/` stores derived SQLite/search indexes.
+- `exports/` stores derived agent contexts and channel snippets.
+- `api/` exposes an optional local service over the same source files.
+
+## Product Modeling
+
+- SPU-level shared facts live in `product.yaml`.
+- SKU/variant-specific facts live in `variants.yaml`.
+- Markdown modules explain facts for humans and agents.
+- `golden-qa.yaml` contains evaluation questions and expected answer policies.
+
+## Media Handling
+
+- Do not embed media files into product text.
+- Store media files under `media/images`, `media/videos`, or `media/transcripts`.
+- Describe assets in `media/media.yaml`.
+- Video agents should consume transcript and metadata before raw video.
+- Future Git LFS, S3, R2, or MinIO support can be added behind the manifest without changing product facts.
+
+## Claim Boundaries
+
+- Allowed claims are in `product.yaml`.
+- Evidence-required claims must not be presented as proven unless source files support them.
+- Forbidden claims must not appear in FAQ, objections, care guides, comparison copy, exports, or generated answers.
+- Do not provide medical, veterinary, legal, or compliance advice unless backed by source files.
+
+## Update Workflow
+
+1. Update source YAML first.
+2. Update Markdown modules second.
+3. Update media manifest if assets change.
+4. Add source notes and unresolved questions.
+5. Run validation and conflict checks.
+6. Rebuild indexes or exports only after source files pass.
+
+## Commands
+
+```bash
+python scripts/new_product.py orthopedic-dog-bed
+python scripts/new_variant.py example-orthopedic-dog-bed ODB-GREY-S --size S --color Grey --length-cm 60 --width-cm 45 --height-cm 14 --min-weight-kg 3 --max-weight-kg 8
+python scripts/validate.py
+python scripts/check_conflicts.py
+python scripts/build_index.py
+python scripts/export_support_context.py
+python scripts/export_shopify.py
+uvicorn api.main:app --reload --port 8710
+pytest
+```
+
+## Safe Changes
+
+- New product: use `scripts/new_product.py`.
+- New variant: use `scripts/new_variant.py`.
+- Dimensions: update only `variants.yaml`, then search Markdown for stale values.
+- Claims: update `product.yaml`, `compliance.md`, and source notes together.
+- Washing instructions: update `product.yaml`, `care-guide.md`, FAQ, and support exports.
+- Media assets: add files under `media/`, update `media/media.yaml`, then validate references.

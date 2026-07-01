@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["assets"],
+  "properties": {
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["asset_id", "type", "path", "usage", "description", "source", "license_status"],
+        "properties": {
+          "asset_id": { "type": "string", "minLength": 1 },
+          "type": { "type": "string", "enum": ["image", "video", "audio", "document"] },
+          "path": { "type": "string", "minLength": 1 },
+          "related_skus": { "type": "array", "items": { "type": "string" } },
+          "related_products": { "type": "array", "items": { "type": "string" } },
+          "usage": { "type": "array", "items": { "type": "string" } },
+          "description": { "type": "string" },
+          "visual_tags": { "type": "array", "items": { "type": "string" } },
+          "alt_text": { "type": "string" },
+          "transcript_path": { "type": "string" },
+          "source": { "type": "string" },
+          "license_status": { "type": "string" },
+          "last_reviewed": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}

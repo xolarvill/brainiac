@@ -1,0 +1,52 @@
+product_id: example-orthopedic-dog-bed
+product_name: Orthopedic Dog Bed
+category: pet_beds
+market: US
+status: active
+
+brand_positioning:
+  price_tier: mid_high
+  target_customer: Pet owners looking for supportive indoor resting products for dogs.
+
+common_facts:
+  pet_type: dog
+  use_cases:
+    - senior dogs
+    - indoor resting
+    - pressure relief
+  not_suitable_for:
+    - aggressive chewing dogs
+    - outdoor use in rain
+
+materials:
+  core: high-density orthopedic foam
+  cover: removable polyester cover
+  bottom: non-slip fabric
+
+washing:
+  cover_machine_washable: true
+  foam_machine_washable: false
+
+warranty: 30-day return window for unused products in original packaging.
+shipping: Ships compressed in one carton. Allow the foam to expand after unpacking.
+
+claims_allowed:
+  - supports joint comfort
+  - helps reduce pressure points
+  - designed for senior dogs
+  - removable washable cover
+
+claims_need_evidence:
+  - veterinarian recommended
+  - clinically tested
+  - orthopedic-grade foam
+
+claims_forbidden:
+  - cures arthritis
+  - treats hip dysplasia
+  - guaranteed pain relief
+
+support_boundaries:
+  medical_advice: Do not provide veterinary or medical advice. Recommend consulting a veterinarian for medical conditions.
+
+last_reviewed: 2026-07-01

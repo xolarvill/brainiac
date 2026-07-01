@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["variants"],
+  "properties": {
+    "variants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "sku_id",
+          "size",
+          "color",
+          "dimensions_cm",
+          "recommended_pet_weight_kg",
+          "media_refs"
+        ],
+        "properties": {
+          "sku_id": { "type": "string", "minLength": 1 },
+          "size": { "type": "string", "minLength": 1 },
+          "color": { "type": "string", "minLength": 1 },
+          "dimensions_cm": {
+            "type": "object",
+            "required": ["length", "width", "height"],
+            "properties": {
+              "length": { "type": "number" },
+              "width": { "type": "number" },
+              "height": { "type": "number" }
+            }
+          },
+          "recommended_pet_weight_kg": {
+            "type": "object",
+            "required": ["min", "max"],
+            "properties": {
+              "min": { "type": "number" },
+              "max": { "type": "number" }
+            }
+          },
+          "suitable_breeds": { "type": "array", "items": { "type": "string" } },
+          "package": { "type": "object" },
+          "media_refs": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}

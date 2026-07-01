@@ -1,0 +1,89 @@
+assets:
+  - asset_id: img_grey_m_main
+    type: image
+    path: media/images/main-grey-m.jpg
+    related_skus:
+      - ODB-GREY-M
+    usage:
+      - product_page
+      - customer_support
+    description: Grey medium orthopedic dog bed main product image.
+    visual_tags:
+      - grey
+      - medium size
+      - front angle
+      - indoor scene
+    alt_text: Grey medium orthopedic dog bed with raised edges and washable cover.
+    source: supplier
+    license_status: approved
+    last_reviewed: 2026-07-01
+
+  - asset_id: img_grey_l_main
+    type: image
+    path: media/images/main-grey-l.jpg
+    related_skus:
+      - ODB-GREY-L
+    usage:
+      - product_page
+      - customer_support
+      - ads
+    description: Grey large orthopedic dog bed main product image.
+    visual_tags:
+      - grey
+      - large size
+      - front angle
+      - indoor scene
+    alt_text: Grey orthopedic dog bed with raised edges and washable cover.
+    source: supplier
+    license_status: approved
+    last_reviewed: 2026-07-01
+
+  - asset_id: img_grey_xl_main
+    type: image
+    path: media/images/main-grey-xl.jpg
+    related_skus:
+      - ODB-GREY-XL
+    usage:
+      - product_page
+      - customer_support
+    description: Grey extra large orthopedic dog bed main product image.
+    visual_tags:
+      - grey
+      - extra large size
+      - front angle
+      - indoor scene
+    alt_text: Grey extra large orthopedic dog bed with washable cover.
+    source: supplier
+    license_status: approved
+    last_reviewed: 2026-07-01
+
+  - asset_id: img_size_chart
+    type: image
+    path: media/images/size-chart.jpg
+    related_products:
+      - example-orthopedic-dog-bed
+    usage:
+      - product_page
+      - customer_support
+    description: Size chart showing M, L, and XL dog bed dimensions.
+    visual_tags:
+      - size chart
+      - dimensions
+    alt_text: Size chart for orthopedic dog bed variants.
+    source: internal
+    license_status: approved
+    last_reviewed: 2026-07-01
+
+  - asset_id: video_washing_demo
+    type: video
+    path: media/videos/washing-demo.mp4
+    related_products:
+      - example-orthopedic-dog-bed
+    usage:
+      - customer_support
+      - product_page
+    description: Demonstrates how to remove and wash the cover.
+    transcript_path: media/transcripts/washing-demo.md
+    source: internal
+    license_status: approved
+    last_reviewed: 2026-07-01

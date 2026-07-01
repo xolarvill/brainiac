@@ -1,0 +1,74 @@
+variants:
+  - sku_id: ODB-GREY-M
+    size: M
+    color: Grey
+    dimensions_cm:
+      length: 70
+      width: 50
+      height: 16
+    recommended_pet_weight_kg:
+      min: 5
+      max: 12
+    suitable_breeds:
+      - Toy Poodle
+      - Dachshund
+      - Small Terrier
+    package:
+      weight_kg: 3.2
+      dimensions_cm:
+        length: 72
+        width: 52
+        height: 18
+    media_refs:
+      - img_grey_m_main
+      - img_size_chart
+
+  - sku_id: ODB-GREY-L
+    size: L
+    color: Grey
+    dimensions_cm:
+      length: 90
+      width: 65
+      height: 18
+    recommended_pet_weight_kg:
+      min: 10
+      max: 25
+    suitable_breeds:
+      - Corgi
+      - Beagle
+      - French Bulldog
+      - Shiba Inu
+    package:
+      weight_kg: 4.5
+      dimensions_cm:
+        length: 92
+        width: 67
+        height: 20
+    media_refs:
+      - img_grey_l_main
+      - img_size_chart
+      - video_washing_demo
+
+  - sku_id: ODB-GREY-XL
+    size: XL
+    color: Grey
+    dimensions_cm:
+      length: 110
+      width: 80
+      height: 20
+    recommended_pet_weight_kg:
+      min: 20
+      max: 40
+    suitable_breeds:
+      - Labrador
+      - Golden Retriever
+      - Border Collie
+    package:
+      weight_kg: 6.8
+      dimensions_cm:
+        length: 112
+        width: 82
+        height: 22
+    media_refs:
+      - img_grey_xl_main
+      - img_size_chart

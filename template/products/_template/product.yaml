@@ -1,0 +1,30 @@
+product_id: replace-me
+product_name: Replace Me
+category: uncategorized
+market: US
+status: draft
+
+brand_positioning:
+  price_tier: unknown
+  target_customer: ""
+
+common_facts:
+  pet_type: ""
+  use_cases: []
+  not_suitable_for: []
+
+materials: {}
+
+washing: {}
+
+warranty: ""
+shipping: ""
+
+claims_allowed: []
+claims_need_evidence: []
+claims_forbidden: []
+
+support_boundaries:
+  medical_advice: Do not provide medical or veterinary advice. Recommend consulting a professional for medical conditions.
+
+last_reviewed: 2026-07-01
