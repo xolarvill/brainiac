@@ -43,4 +43,10 @@ The system starts with customer support QA, but the same files can support listi
 
 The canonical skill lives in `skill/SKILL.md`. The Codex plugin manifest in `.codex-plugin/plugin.json` points at the standard `skills/` plugin directory, where `skills/product-kb-system/SKILL.md` is only a thin compatibility entrypoint. Do not duplicate skill content inside plugin metadata.
 
+Current skill split:
+
+- `$product-kb-init`: initialize a repo from `template/`, install uv dependencies, validate the example, and start the optional API.
+- `$product-kb-accumulate`: turn source material into SPU/SKU YAML, Markdown modules, golden QA, and media manifests.
+- `$product-kb-update`: maintain facts, claims, variants, media, exports, indexes, and API behavior without editing derived artifacts as source truth.
+
 For local plugin development, update this repository, reinstall or refresh the plugin in Codex, then start a new thread so Codex reloads the skill metadata.

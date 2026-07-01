@@ -1,0 +1,4 @@
+interface:
+  display_name: "Product KB Accumulate"
+  short_description: "Turn sources into SKU product knowledge"
+  default_prompt: "Use $product-kb-accumulate to turn source material into structured ecommerce product knowledge."

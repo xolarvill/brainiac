@@ -28,8 +28,8 @@
     "websiteURL": "https://github.com/xolarvill/product-kb-system",
     "defaultPrompt": [
       "Initialize a local product knowledge repository from the template.",
-      "Add a new SKU-level product knowledge entry.",
-      "Validate and export customer-support context from this product knowledge repo."
+      "Use $product-kb-accumulate to add source-backed SKU-level product knowledge.",
+      "Use $product-kb-update to validate and export customer-support context from this product knowledge repo."
     ],
     "brandColor": "#111827"
   }

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Product KB Init"
+  short_description: "Initialize product knowledge repositories"
+  default_prompt: "Use $product-kb-init to initialize a local ecommerce product knowledge repository."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Product KB Update"
+  short_description: "Maintain and validate SKU product knowledge"
+  default_prompt: "Use $product-kb-update to safely update facts, claims, media, variants, exports, and indexes in a product knowledge repository."
