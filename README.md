@@ -111,7 +111,7 @@ Potential consuming agents should start with `template/ACCESS.md` after a repo i
 Marketplace install:
 
 ```bash
-codex plugin marketplace add xolarvill/brainiac --ref main
+codex plugin marketplace add xolarvill/brainiac --ref master
 codex plugin add brainiac@brainiac
 ```
 
