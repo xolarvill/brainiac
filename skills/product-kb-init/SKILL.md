@@ -36,3 +36,13 @@ UV_CACHE_DIR=.uv-cache uv run uvicorn api.main:app --reload --port 8710
 ## Completion Check
 
 The init is complete only when `scripts/validate.py` and `pytest` pass in the target repo.
+
+## User-Facing Completion
+
+Keep the final response focused on what the user can act on:
+
+- Say the repository is initialized and whether validation/tests passed.
+- Point the user to place raw product material under `products/<product_id>/raw/`.
+- Suggest `$product-kb-accumulate` as the next workflow when source files are ready.
+
+Do not surface template maintenance details such as retaining or deleting the example product unless the user asks. The example data is an internal bootstrap fixture, not a next-step instruction.
