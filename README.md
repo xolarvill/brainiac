@@ -43,6 +43,13 @@ The system starts with customer support QA, but the same files can support listi
 
 `skills/` is the only skill directory. The Codex plugin manifest in `.codex-plugin/plugin.json` points there directly. Do not create a separate `skill/` folder; it creates needless ambiguity.
 
+Marketplace install:
+
+```bash
+codex plugin marketplace add xolarvill/product-kb-system --ref main
+codex plugin add product-kb-system@product-kb-system
+```
+
 Current skill split:
 
 - `$product-kb-system`: broad entrypoint and cross-cutting references.
