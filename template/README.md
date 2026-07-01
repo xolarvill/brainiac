@@ -16,6 +16,32 @@ YAML, Markdown, media manifests, and source files are the source of truth. Index
 - `indexes/`: derived search indexes.
 - `exports/`: derived contexts for agents and channels.
 
+## Raw Source Intake
+
+Put raw materials in `sources/<product-slug>/` and pass Codex the path. Do not paste long supplier docs, reviews, transcripts, or competitor pages into the chat window.
+
+Recommended layout:
+
+```text
+sources/
+  orthopedic-dog-bed/
+    supplier-docs/
+    competitor-pages/
+    customer-reviews/
+    customer-support/
+    interview-notes/
+    media-inbox/
+```
+
+Examples:
+
+```text
+$product-kb-accumulate ingest sources/orthopedic-dog-bed into products/orthopedic-dog-bed
+$product-kb-update update ODB-GREY-L using sources/orthopedic-dog-bed/supplier-docs/2026-size-sheet.pdf
+```
+
+After Codex reads the source files, durable facts should be written into `products/<product_id>/`. Keep unresolved or weak evidence in `source-notes.md`.
+
 ## Setup
 
 ```bash

@@ -17,6 +17,12 @@ This repository stores product knowledge as version-controlled source files.
 - Markdown modules explain facts for humans and agents.
 - `golden-qa.yaml` contains evaluation questions and expected answer policies.
 
+## Source Intake
+
+Prefer `sources/<product-slug>/` for raw materials tied to one product. Use subfolders such as `supplier-docs`, `competitor-pages`, `customer-reviews`, `customer-support`, `interview-notes`, and `media-inbox`.
+
+Read source files from disk. Do not ask users to paste large raw documents into chat. If a source is missing, write the gap in `source-notes.md`.
+
 ## Media Handling
 
 - Do not embed media files into product text.

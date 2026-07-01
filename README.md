@@ -39,6 +39,62 @@ On first use, copy `template/` into a new product knowledge repository. Future a
 
 The system starts with customer support QA, but the same files can support listing, SEO, ad copy, content, and media pipeline agents.
 
+## User Workflow After Installing
+
+Brainiac is a workflow plugin, not the place where product knowledge lives. After installing the plugin, create a separate product knowledge repo for your store or product line.
+
+```text
+my-store-product-kb/
+```
+
+Ask Codex:
+
+```text
+$product-kb-init initialize this folder as a Brainiac product knowledge repo
+```
+
+Then place raw materials on disk, not in the Codex chat window. The chat should contain the task and paths only.
+
+Recommended raw source layout:
+
+```text
+sources/
+  orthopedic-dog-bed/
+    supplier-docs/
+    competitor-pages/
+    customer-reviews/
+    customer-support/
+    interview-notes/
+    media-inbox/
+```
+
+Drop supplier PDFs, copied product specs, review exports, support transcripts, interview notes, competitor page captures, image files, video files, and transcript drafts into those folders. For large webpages or PDFs, save them as files first. Do not paste long source dumps into chat unless the source is tiny.
+
+Then ask Codex:
+
+```text
+$product-kb-accumulate ingest sources/orthopedic-dog-bed into products/orthopedic-dog-bed
+```
+
+Codex should read the source files from disk, extract facts, and write the source of truth into:
+
+```text
+products/orthopedic-dog-bed/product.yaml
+products/orthopedic-dog-bed/variants.yaml
+products/orthopedic-dog-bed/*.md
+products/orthopedic-dog-bed/golden-qa.yaml
+products/orthopedic-dog-bed/media/media.yaml
+```
+
+Use chat for judgment and direction:
+
+```text
+$product-kb-update update ODB-GREY-L dimensions from sources/orthopedic-dog-bed/supplier-docs/2026-size-sheet.pdf
+$product-kb-update add the new washing limitation from sources/orthopedic-dog-bed/customer-support/june-tickets.md
+```
+
+Brainiac's job is to grill raw source folders into durable product knowledge files. It should not treat the conversation context as the knowledge store.
+
 ## Skill And Plugin Packaging
 
 `skills/` is the only skill directory. The Codex plugin manifest in `.codex-plugin/plugin.json` points there directly. Do not create a separate `skill/` folder; it creates needless ambiguity.

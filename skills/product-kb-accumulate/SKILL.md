@@ -5,22 +5,23 @@ description: Accumulate ecommerce product knowledge from supplier docs, reviews,
 
 # Product KB Accumulate
 
-Turn source material into source-backed product knowledge files.
+Turn source folders into source-backed product knowledge files. Do not ask the user to paste long raw materials into chat.
 
 ## Workflow
 
 1. Read `AGENT.md` in the product knowledge repo.
-2. Create a product folder when needed:
+2. Locate raw materials under `sources/<product-slug>/`. If the user pasted a large dump into chat, ask them to save it under `sources/<product-slug>/` and provide the path.
+3. Create a product folder when needed:
 
 ```bash
 UV_CACHE_DIR=.uv-cache uv run python scripts/new_product.py <product-slug>
 ```
 
-3. Write structured facts first:
+4. Write structured facts first:
    - SPU/common facts in `products/<product_id>/product.yaml`
    - SKU/variant facts in `products/<product_id>/variants.yaml`
    - media metadata in `products/<product_id>/media/media.yaml`
-4. Then write human-readable modules:
+5. Then write human-readable modules:
    - `faq.md`
    - `objections.md`
    - `care-guide.md`
@@ -28,8 +29,8 @@ UV_CACHE_DIR=.uv-cache uv run python scripts/new_product.py <product-slug>
    - `comparison.md`
    - `source-notes.md`
    - `golden-qa.yaml`
-5. Record uncertainty in `source-notes.md`; do not fabricate missing facts.
-6. Validate:
+6. Record uncertainty in `source-notes.md`; do not fabricate missing facts.
+7. Validate:
 
 ```bash
 UV_CACHE_DIR=.uv-cache uv run python scripts/validate.py
@@ -41,7 +42,7 @@ UV_CACHE_DIR=.uv-cache uv run python scripts/check_conflicts.py
 - Product-wide facts go in `product.yaml`.
 - SKU-specific dimensions, colors, weight ranges, package facts, and media refs go in `variants.yaml`.
 - Claims and boundaries go in `product.yaml` and `compliance.md`.
-- Raw or unresolved evidence goes in `sources/` and `source-notes.md`.
+- Raw source files go in `sources/<product-slug>/`; unresolved evidence and human judgment go in `source-notes.md`.
 - Media files stay under `media/`; agents consume asset IDs and transcripts.
 
 ## Claim Rules

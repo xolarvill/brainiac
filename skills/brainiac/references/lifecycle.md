@@ -15,6 +15,7 @@ Use this reference for cross-cutting product knowledge tasks that do not fit onl
 - Never invent unsupported product claims.
 - Never make medical, veterinary, legal, or compliance claims unless backed by source files.
 - Record missing information in `source-notes.md` instead of fabricating.
+- Keep raw source material on disk under `sources/<product-slug>/`; do not use chat history as the source store.
 
 ## Product Model
 
@@ -23,6 +24,22 @@ Use this reference for cross-cutting product knowledge tasks that do not fit onl
 - Markdown modules: FAQ, objections, care, compliance, comparison, and source context.
 - `media/media.yaml`: media metadata; product text should reference asset IDs, not embed files.
 - `golden-qa.yaml`: evaluation questions and expected answer policies.
+
+## Raw Source Intake
+
+Use this product-scoped layout:
+
+```text
+sources/<product-slug>/
+  supplier-docs/
+  competitor-pages/
+  customer-reviews/
+  customer-support/
+  interview-notes/
+  media-inbox/
+```
+
+The user should provide paths to source folders or files. Codex should read from disk, extract facts, and write durable knowledge under `products/<product_id>/`.
 
 ## Command Groups
 
