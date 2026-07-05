@@ -17,7 +17,7 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Brainiac",
-    "shortDescription": "Local-first SKU product knowledge workflows for AI agents.",
+    "shortDescription": "Build and use SKU-level product knowledge bank",
     "longDescription": "Initialize and maintain version-controlled ecommerce product knowledge repositories with YAML, Markdown, media manifests, validation, exports, and an optional local API.",
     "developerName": "victor",
     "category": "Productivity",
