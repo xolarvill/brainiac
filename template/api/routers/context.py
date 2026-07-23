@@ -1,11 +1,19 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Literal
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
-from kb import build_customer_support_context, find_variant, load_product, load_variants, markdown_bundle, product_dir
+from kb import (
+    build_customer_support_context,
+    load_product,
+    load_variant_axes,
+    load_variants,
+    markdown_bundle,
+    product_dir,
+    resolve_variant,
+)
 
 router = APIRouter(prefix="/context")
 
@@ -13,6 +21,9 @@ router = APIRouter(prefix="/context")
 class ContextRequest(BaseModel):
     product_id: str
     sku_id: str | None = None
+    variant_identifier: str | None = None
+    variant_options: dict[str, Any] = Field(default_factory=dict)
+    page_mode: Literal["family", "variant", "comparison"] = "family"
     customer_question: str | None = None
     language: str = "en"
     channel: str | None = None
@@ -29,6 +40,7 @@ class CustomerSupportContext(BaseModel):
     sku_id: str | None
     relevant_facts: list[dict[str, Any]]
     variant_facts: dict[str, Any]
+    variant_options: dict[str, Any]
     care_instructions: list[str]
     claim_boundaries: ClaimBoundaries
     suggested_answer_style: str
@@ -40,7 +52,12 @@ class CustomerSupportContext(BaseModel):
 
 class ListingContext(BaseModel):
     product_id: str
+    page_mode: Literal["family", "variant", "comparison"]
+    parent_product: dict[str, Any]
     variant_facts: list[dict[str, Any]]
+    variant_axes: list[dict[str, Any]]
+    selected_variant: dict[str, Any] | None
+    resolution: dict[str, Any]
     positioning: dict[str, Any]
     allowed_claims: list[str]
     forbidden_claims: list[str]
@@ -68,19 +85,32 @@ def ensure_product(product_id: str) -> None:
         raise HTTPException(status_code=404, detail="Product not found")
 
 
-def ensure_sku(product_id: str, sku_id: str | None) -> None:
-    if sku_id is not None and not find_variant(product_id, sku_id):
-        raise HTTPException(status_code=404, detail="SKU not found")
+def resolve_request_variant(request: ContextRequest) -> dict[str, Any]:
+    identifier = request.variant_identifier or request.sku_id
+    resolution = resolve_variant(request.product_id, identifier, request.variant_options)
+    if resolution["status"] == "not_found" and (identifier or request.variant_options):
+        raise HTTPException(status_code=404, detail="Variant not found")
+    if resolution["status"] == "ambiguous":
+        raise HTTPException(
+            status_code=409,
+            detail={
+                "message": "Variant selection is ambiguous",
+                "matches": [variant.get("sku_id") for variant in resolution["matches"]],
+            },
+        )
+    return resolution
 
 
 @router.post("/customer-support", response_model=CustomerSupportContext)
 def customer_support_context(request: ContextRequest) -> CustomerSupportContext:
     ensure_product(request.product_id)
-    ensure_sku(request.product_id, request.sku_id)
+    resolution = resolve_request_variant(request)
+    selected = resolution["selected_variant"] or {}
+    selected_sku = selected.get("sku_id") or request.sku_id
     return CustomerSupportContext.model_validate(
         build_customer_support_context(
             request.product_id,
-            request.sku_id,
+            selected_sku,
             customer_question=request.customer_question,
         )
     )
@@ -90,9 +120,17 @@ def customer_support_context(request: ContextRequest) -> CustomerSupportContext:
 def listing_context(request: ContextRequest) -> ListingContext:
     ensure_product(request.product_id)
     product = load_product(request.product_id)
+    resolution = resolve_request_variant(request)
+    if request.page_mode == "variant" and resolution["status"] != "matched":
+        raise HTTPException(status_code=409, detail="A variant page requires one resolved variant")
     return ListingContext(
         product_id=request.product_id,
+        page_mode=request.page_mode,
+        parent_product=product,
         variant_facts=load_variants(request.product_id),
+        variant_axes=load_variant_axes(request.product_id),
+        selected_variant=resolution["selected_variant"],
+        resolution=resolution,
         positioning=product.get("brand_positioning", {}),
         allowed_claims=product.get("claims_allowed", []),
         forbidden_claims=product.get("claims_forbidden", []),
@@ -109,7 +147,7 @@ def ad_copy_context(request: ContextRequest) -> AdCopyContext:
         allowed_claims=product.get("claims_allowed", []),
         need_evidence=product.get("claims_need_evidence", []),
         forbidden_claims=product.get("claims_forbidden", []),
-        tone="benefit-led, cautious, no medical promises",
+        tone=product.get("copy_guidance", {}).get("tone", "clear, source-backed, cautious"),
     )
 
 
@@ -118,14 +156,17 @@ def seo_context(request: ContextRequest) -> SeoContext:
     ensure_product(request.product_id)
     product = load_product(request.product_id)
     modules = markdown_bundle(request.product_id)
+    variant_axes = load_variant_axes(request.product_id)
+    product_name = product.get("product_name", "this product")
+    question_ideas = [
+        f"Which {axis.get('label', axis.get('key'))} should I choose for {product_name}?"
+        for axis in variant_axes
+        if axis.get("key")
+    ] or [f"What should I know before choosing {product_name}?"]
     return SeoContext(
         product_id=request.product_id,
         topics=product.get("common_facts", {}).get("use_cases", []),
         faq_source=modules["faq.md"],
-        long_tail_question_ideas=[
-            f"Which {product.get('product_name')} size should I choose?",
-            f"How do I clean a {product.get('product_name')}?",
-            f"Is a {product.get('product_name')} suitable for senior dogs?",
-        ],
+        long_tail_question_ideas=question_ideas,
         forbidden_claims=product.get("claims_forbidden", []),
     )

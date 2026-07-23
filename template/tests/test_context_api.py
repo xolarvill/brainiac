@@ -39,6 +39,20 @@ def test_listing_context_returns_variants_and_sources() -> None:
     ]
 
 
+def test_listing_context_resolves_variant_options() -> None:
+    response = client.post(
+        "/context/listing",
+        json={"product_id": "example-orthopedic-dog-bed", "variant_options": {"size": "L"}},
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["page_mode"] == "family"
+    assert data["parent_product"]["product_id"] == "example-orthopedic-dog-bed"
+    assert data["resolution"]["status"] == "matched"
+    assert data["selected_variant"]["sku_id"] == "ODB-GREY-L"
+
+
 def test_ad_copy_context_returns_claim_boundaries() -> None:
     response = client.post("/context/ad-copy", json={"product_id": "example-orthopedic-dog-bed"})
 
@@ -79,3 +93,23 @@ def test_sources_are_available_to_downstream_agents() -> None:
 
     assert response.status_code == 200
     assert response.json() == []
+
+
+def test_variant_resolve_endpoint_matches_identifier() -> None:
+    response = client.post(
+        "/products/example-orthopedic-dog-bed/variants/resolve",
+        json={"identifier": "ODB-GREY-L"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["status"] == "matched"
+    assert response.json()["selected_variant"]["sku_id"] == "ODB-GREY-L"
+
+
+def test_variant_page_requires_resolved_variant() -> None:
+    response = client.post(
+        "/context/listing",
+        json={"product_id": "example-orthopedic-dog-bed", "page_mode": "variant"},
+    )
+
+    assert response.status_code == 409
