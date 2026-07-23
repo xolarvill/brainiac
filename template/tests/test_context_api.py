@@ -24,6 +24,7 @@ def test_customer_support_context_returns_claim_boundaries() -> None:
     assert data["variant_facts"]["sku_id"] == "ODB-GREY-L"
     assert "cures arthritis" in data["claim_boundaries"]["forbidden"]
     assert data["suggested_answer_style"] == "helpful, cautious, non-medical"
+    assert data["retrieved_evidence"]
 
 
 def test_listing_context_returns_variants_and_sources() -> None:
@@ -62,3 +63,19 @@ def test_context_returns_404_for_missing_product() -> None:
     response = client.post("/context/customer-support", json={"product_id": "missing-product"})
 
     assert response.status_code == 404
+
+
+def test_context_returns_404_for_missing_sku() -> None:
+    response = client.post(
+        "/context/customer-support",
+        json={"product_id": "example-orthopedic-dog-bed", "sku_id": "missing-sku"},
+    )
+
+    assert response.status_code == 404
+
+
+def test_sources_are_available_to_downstream_agents() -> None:
+    response = client.get("/products/example-orthopedic-dog-bed/sources")
+
+    assert response.status_code == 200
+    assert response.json() == []

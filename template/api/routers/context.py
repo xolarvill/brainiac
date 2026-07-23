@@ -5,7 +5,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from kb import build_customer_support_context, load_product, load_variants, markdown_bundle, product_dir
+from kb import build_customer_support_context, find_variant, load_product, load_variants, markdown_bundle, product_dir
 
 router = APIRouter(prefix="/context")
 
@@ -34,6 +34,7 @@ class CustomerSupportContext(BaseModel):
     suggested_answer_style: str
     must_not_say: list[str]
     golden_qa: list[dict[str, Any]]
+    retrieved_evidence: list[dict[str, str]]
     source_files: list[str]
 
 
@@ -67,10 +68,22 @@ def ensure_product(product_id: str) -> None:
         raise HTTPException(status_code=404, detail="Product not found")
 
 
+def ensure_sku(product_id: str, sku_id: str | None) -> None:
+    if sku_id is not None and not find_variant(product_id, sku_id):
+        raise HTTPException(status_code=404, detail="SKU not found")
+
+
 @router.post("/customer-support", response_model=CustomerSupportContext)
 def customer_support_context(request: ContextRequest) -> CustomerSupportContext:
     ensure_product(request.product_id)
-    return CustomerSupportContext.model_validate(build_customer_support_context(request.product_id, request.sku_id))
+    ensure_sku(request.product_id, request.sku_id)
+    return CustomerSupportContext.model_validate(
+        build_customer_support_context(
+            request.product_id,
+            request.sku_id,
+            customer_question=request.customer_question,
+        )
+    )
 
 
 @router.post("/listing", response_model=ListingContext)
