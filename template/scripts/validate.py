@@ -15,6 +15,7 @@ from kb import (
     REQUIRED_PRODUCT_FILES,
     load_yaml,
     product_dirs,
+    referenced_source_ids,
     variant_identifier_values,
     variant_options,
 )
@@ -92,6 +93,7 @@ def validate_product(folder: Path) -> list[str]:
 
     source_records = load_yaml(folder / "sources.yaml").get("sources", [])
     source_ids = [record.get("source_id") for record in source_records]
+    known_source_ids = {source_id for source_id in source_ids if source_id}
     source_paths = [record.get("path") for record in source_records]
     for value, label in [(source_ids, "source_id"), (source_paths, "source path")]:
         duplicates = sorted({item for item in value if item and value.count(item) > 1})
@@ -109,6 +111,17 @@ def validate_product(folder: Path) -> list[str]:
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
         if digest != record.get("sha256"):
             errors.append(f"{folder.name}: source changed since ingest, rerun scripts/ingest_sources.py: {relative}")
+
+    product = load_yaml(folder / "product.yaml")
+    for source_id in referenced_source_ids(product):
+        if source_id not in known_source_ids:
+            errors.append(f"{folder.name}/product.yaml: unknown source reference {source_id}")
+    for variant in variants:
+        for source_id in referenced_source_ids(variant):
+            if source_id not in known_source_ids:
+                errors.append(
+                    f"{folder.name}/variants.yaml: {variant.get('sku_id')} references unknown source {source_id}"
+                )
 
     return errors
 

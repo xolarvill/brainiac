@@ -22,6 +22,16 @@ def parse_pairs(values: list[str]) -> dict[str, object]:
     return result
 
 
+def parse_evidence(values: list[str]) -> dict[str, list[str]]:
+    result: dict[str, list[str]] = {}
+    for value in values:
+        key, separator, source_id = value.partition("=")
+        if not separator or not key.strip() or not source_id.strip():
+            raise ValueError(f"Expected FIELD=SOURCE_ID, got: {value}")
+        result.setdefault(key.strip(), []).append(source_id.strip())
+    return result
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Add a product variant to variants.yaml.")
     parser.add_argument("product_id")
@@ -31,6 +41,7 @@ def main() -> int:
     parser.add_argument("--option", action="append", default=[], metavar="KEY=VALUE")
     parser.add_argument("--attribute", action="append", default=[], metavar="KEY=VALUE")
     parser.add_argument("--source-ref", action="append", default=[])
+    parser.add_argument("--evidence", action="append", default=[], metavar="FIELD=SOURCE_ID")
     parser.add_argument("--media-ref", action="append", default=[])
     args = parser.parse_args()
 
@@ -42,6 +53,7 @@ def main() -> int:
     try:
         options = parse_pairs(args.option)
         attributes = parse_pairs(args.attribute)
+        evidence = parse_evidence(args.evidence)
     except ValueError as exc:
         print(str(exc), file=sys.stderr)
         return 1
@@ -54,10 +66,12 @@ def main() -> int:
 
     variant = {
         "sku_id": args.sku_id,
+        "parent_product_id": args.product_id,
         "options": options,
         "attributes": attributes,
         "aliases": args.alias,
         "source_refs": args.source_ref,
+        "evidence": evidence,
         "media_refs": args.media_ref,
     }
     if args.model_number:

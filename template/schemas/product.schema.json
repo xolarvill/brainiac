@@ -25,6 +25,14 @@
     "brand_positioning": { "type": "object" },
     "common_facts": { "type": "object" },
     "attributes": { "type": "object" },
+    "source_refs": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string", "minLength": 1 }
+      }
+    },
     "answer_style": { "type": "string" },
     "copy_guidance": { "type": "object" },
     "materials": { "type": "object" },

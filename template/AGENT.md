@@ -17,6 +17,7 @@ This repository stores product knowledge as version-controlled source files.
 - SPU-level shared facts live in `product.yaml`.
 - `variants.yaml` declares option axes and SKU/model-specific options, identifiers, attributes, and media refs.
 - Parent product facts are inherited by variants; variant-specific values must be explicit overrides.
+- Link official facts to raw evidence with `source_refs`; use `evidence: {field.path: [source_id]}` when the source applies to a specific field.
 - Markdown modules explain facts for humans and agents.
 - `golden-qa.yaml` contains evaluation questions and expected answer policies.
 

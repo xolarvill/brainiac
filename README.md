@@ -114,6 +114,8 @@ Potential consuming agents should start with `template/ACCESS.md` after a repo i
 - Direct file agents read `products/<product_id>/product.yaml`, `variants.yaml`, Markdown modules, `golden-qa.yaml`, and `media/media.yaml`.
 - API agents call `/products`, `/products/{product_id}`, `/products/{product_id}/variants`, `/products/{product_id}/media`, `/context/*`, and `/search`.
 - Downstream agents can call `/products/{product_id}/sources` for source metadata and `/search?q=...&product_id=...` for evidence snippets with `source_id` and `path`.
+- Official product and variant facts may declare `source_refs` plus field-level `evidence`; validation rejects references not present in `sources.yaml`, and context APIs return resolved source metadata.
+- Listing and support contexts expose parent facts, selected variant facts, and available option values so downstream agents do not infer SKU inheritance from prose.
 - For multi-variant pages, resolve a model/SKU or option combination first; an ambiguous result must remain a selection request.
 - Neither type should treat `products/<product_id>/raw/` as official product knowledge. Raw files are evidence for maintenance and accumulation.
 

@@ -8,6 +8,7 @@ This repository is the source of truth for product knowledge. Consuming agents c
 - Treat `indexes/` and `exports/` as derived artifacts.
 - Treat `products/<product_id>/raw/` as evidence only, not official product knowledge.
 - Treat `products/<product_id>/sources.yaml` as the machine-readable inventory of raw evidence.
+- Treat `source_refs` and field-level `evidence` maps as the only accepted links from official facts to raw evidence.
 - Do not make claims listed in `claims_forbidden`.
 - Do not present `claims_need_evidence` as proven unless a source file supports it.
 - Prefer media transcripts and metadata over raw video files.
@@ -76,3 +77,5 @@ Context request shape:
 - Use exports when the consumer only needs a reproducible context bundle.
 - Use `/search` when the consumer needs source-backed snippets; preserve each result's `source_id` and `path` in the generated answer.
 - Resolve a model/SKU or option combination before generating a variant page. Treat `ambiguous` as a selection request, not as permission to choose a sibling variant.
+- Context responses include `inherited_facts`, `available_options`, and `evidence`; use parent facts together with the selected variant facts.
+- Evidence records include the source path and SHA-256 when a fact has a valid source reference. Do not treat missing evidence as proof.

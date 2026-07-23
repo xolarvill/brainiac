@@ -207,6 +207,95 @@ def load_sources(product_id: str, root: Path = ROOT) -> list[dict[str, Any]]:
     return data.get("sources", [])
 
 
+def referenced_source_ids(data: dict[str, Any]) -> list[str]:
+    refs = [str(value) for value in data.get("source_refs", []) if value]
+    for values in data.get("evidence", {}).values():
+        if isinstance(values, list):
+            refs.extend(str(value) for value in values if value)
+    return refs
+
+
+def source_evidence(
+    product_id: str,
+    variant: dict[str, Any] | None = None,
+    root: Path = ROOT,
+) -> list[dict[str, Any]]:
+    records = {record.get("source_id"): record for record in load_sources(product_id, root)}
+    product = load_product(product_id, root)
+    scopes = [("product", product)]
+    if variant:
+        scopes.append((f"variant:{variant.get('sku_id', 'unknown')}", variant))
+
+    result: list[dict[str, Any]] = []
+    seen: set[tuple[str, str | None, str]] = set()
+    for scope, data in scopes:
+        for source_id in data.get("source_refs", []):
+            key = (scope, None, str(source_id))
+            if key not in seen:
+                seen.add(key)
+                result.append(_source_evidence_record(scope, None, str(source_id), records))
+        for field, source_ids in data.get("evidence", {}).items():
+            for source_id in source_ids:
+                key = (scope, str(field), str(source_id))
+                if key not in seen:
+                    seen.add(key)
+                    result.append(_source_evidence_record(scope, str(field), str(source_id), records))
+    return result
+
+
+def _source_evidence_record(
+    scope: str,
+    field: str | None,
+    source_id: str,
+    records: dict[str | None, dict[str, Any]],
+) -> dict[str, Any]:
+    record = records.get(source_id)
+    evidence: dict[str, Any] = {"source_id": source_id, "scope": scope}
+    if field:
+        evidence["field"] = field
+    if record:
+        evidence.update(
+            {
+                "path": record.get("path"),
+                "kind": record.get("kind"),
+                "mime_type": record.get("mime_type"),
+                "sha256": record.get("sha256"),
+            }
+        )
+    else:
+        evidence["status"] = "missing"
+    return evidence
+
+
+def inherited_variant_facts(
+    product: dict[str, Any],
+    variant: dict[str, Any] | None,
+    axes: list[dict[str, Any]],
+) -> dict[str, Any]:
+    variant = variant or {}
+    return {
+        "common_facts": product.get("common_facts", {}),
+        "product_attributes": product.get("attributes", {}),
+        "variant_options": variant_options(variant, axes),
+        "variant_attributes": variant.get("attributes", {}),
+    }
+
+
+def available_variant_options(product_id: str, root: Path = ROOT) -> dict[str, list[Any]]:
+    axes = load_variant_axes(product_id, root)
+    values: dict[str, list[Any]] = {axis.get("key"): [] for axis in axes if axis.get("key")}
+    markers: dict[str, set[str]] = {key: set() for key in values}
+    for variant in load_variants(product_id, root):
+        for key, value in variant_options(variant, axes).items():
+            if key not in values or value is None:
+                continue
+            marker = json.dumps(value, ensure_ascii=False, sort_keys=True)
+            if marker not in markers[key]:
+                markers[key].add(marker)
+                values[key].append(value)
+    return values
+
+
 def source_id_for_path(path: Path, root: Path = ROOT) -> str:
     product_root = root / "products" / path.relative_to(root / "products").parts[0]
     relative_path = path.relative_to(product_root).as_posix().encode("utf-8")
@@ -268,8 +357,11 @@ def build_customer_support_context(
 ) -> dict[str, Any]:
     product = load_product(product_id, root)
     variant = find_variant(product_id, sku_id, root)
+    axes = load_variant_axes(product_id, root)
+    resolution = resolve_variant(product_id, sku_id, root=root)
     return {
         "product_id": product_id,
+        "parent_product_id": product_id,
         "sku_id": sku_id,
         "relevant_facts": [
             {"product_name": product.get("product_name")},
@@ -277,7 +369,10 @@ def build_customer_support_context(
             {"attributes": product.get("attributes", {})},
         ],
         "variant_facts": variant,
-        "variant_options": variant_options(variant, load_variant_axes(product_id, root)),
+        "variant_options": variant_options(variant, axes),
+        "inherited_facts": inherited_variant_facts(product, variant, axes),
+        "resolution": resolution,
+        "evidence": source_evidence(product_id, variant or None, root),
         "care_instructions": read_text(product_dir(product_id, root) / "care-guide.md").splitlines(),
         "claim_boundaries": {
             "allowed": product.get("claims_allowed", []),

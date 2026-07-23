@@ -51,6 +51,23 @@ def test_listing_context_resolves_variant_options() -> None:
     assert data["parent_product"]["product_id"] == "example-orthopedic-dog-bed"
     assert data["resolution"]["status"] == "matched"
     assert data["selected_variant"]["sku_id"] == "ODB-GREY-L"
+    assert data["inherited_facts"]["common_facts"]["pet_type"] == "dog"
+    assert data["inherited_facts"]["variant_options"] == {"size": "L", "color": "Grey"}
+    assert data["available_options"]["size"] == ["M", "L", "XL"]
+
+
+def test_customer_support_context_reports_resolution_and_inheritance() -> None:
+    response = client.post(
+        "/context/customer-support",
+        json={"product_id": "example-orthopedic-dog-bed", "variant_options": {"size": "L"}},
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["parent_product_id"] == "example-orthopedic-dog-bed"
+    assert data["resolution"]["status"] == "matched"
+    assert data["resolution"]["requested_options"] == {"size": "L"}
+    assert data["inherited_facts"]["variant_options"]["color"] == "Grey"
 
 
 def test_ad_copy_context_returns_claim_boundaries() -> None:

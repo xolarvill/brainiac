@@ -36,6 +36,13 @@
           "options": { "type": "object" },
           "attributes": { "type": "object" },
           "source_refs": { "type": "array", "items": { "type": "string" } },
+          "evidence": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            }
+          },
           "package": { "type": "object" },
           "media_refs": { "type": "array", "items": { "type": "string" } }
         },
