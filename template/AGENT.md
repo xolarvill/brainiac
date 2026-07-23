@@ -15,7 +15,8 @@ This repository stores product knowledge as version-controlled source files.
 ## Product Modeling
 
 - SPU-level shared facts live in `product.yaml`.
-- SKU/variant-specific facts live in `variants.yaml`.
+- `variants.yaml` declares option axes and SKU/model-specific options, identifiers, attributes, and media refs.
+- Parent product facts are inherited by variants; variant-specific values must be explicit overrides.
 - Markdown modules explain facts for humans and agents.
 - `golden-qa.yaml` contains evaluation questions and expected answer policies.
 
@@ -38,7 +39,7 @@ Read source files from disk. Do not ask users to paste large raw documents into 
 - Allowed claims are in `product.yaml`.
 - Evidence-required claims must not be presented as proven unless source files support them.
 - Forbidden claims must not appear in FAQ, objections, care guides, comparison copy, exports, or generated answers.
-- Do not provide medical, veterinary, legal, or compliance advice unless backed by source files.
+- Do not provide health, legal, or compliance advice unless backed by source files.
 
 ## Update Workflow
 
@@ -52,9 +53,9 @@ Read source files from disk. Do not ask users to paste large raw documents into 
 ## Commands
 
 ```bash
-uv run python scripts/new_product.py orthopedic-dog-bed
-uv run python scripts/ingest_sources.py orthopedic-dog-bed /path/to/source-folder
-uv run python scripts/new_variant.py example-orthopedic-dog-bed ODB-GREY-S --size S --color Grey --length-cm 60 --width-cm 45 --height-cm 14 --min-weight-kg 3 --max-weight-kg 8
+uv run python scripts/new_product.py <product-slug>
+uv run python scripts/ingest_sources.py <product-id> /path/to/source-folder
+uv run python scripts/new_variant.py <product-id> <sku-id> --model-number <model-number> --option option_name=value
 uv run python scripts/validate.py
 uv run python scripts/check_conflicts.py
 uv run python scripts/build_index.py
@@ -70,5 +71,5 @@ uv run pytest
 - New variant: use `scripts/new_variant.py`.
 - Dimensions: update only `variants.yaml`, then search Markdown for stale values.
 - Claims: update `product.yaml`, `compliance.md`, and source notes together.
-- Washing instructions: update `product.yaml`, `care-guide.md`, FAQ, and support exports.
+- Product-specific care instructions: update `product.yaml`, the relevant Markdown module, and support exports.
 - Media assets: add files under `media/`, update `media/media.yaml`, then validate references.

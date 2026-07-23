@@ -46,6 +46,7 @@ GET  /health
 GET  /products
 GET  /products/{product_id}
 GET  /products/{product_id}/variants
+POST /products/{product_id}/variants/resolve
 GET  /products/{product_id}/media
 GET  /products/{product_id}/sources
 POST /context/customer-support
@@ -59,11 +60,12 @@ Context request shape:
 
 ```json
 {
-  "product_id": "example-orthopedic-dog-bed",
-  "sku_id": "ODB-GREY-L",
-  "customer_question": "Can this bed help my old dog with arthritis?",
+  "product_id": "<product-id>",
+  "variant_identifier": "<model-or-sku>",
+  "variant_options": {"option_name": "value"},
+  "customer_question": "What should I know about this product?",
   "language": "en",
-  "channel": "shopify_chat"
+  "channel": "support"
 }
 ```
 
@@ -73,3 +75,4 @@ Context request shape:
 - Use FastAPI when another local tool or agent needs a stable interface.
 - Use exports when the consumer only needs a reproducible context bundle.
 - Use `/search` when the consumer needs source-backed snippets; preserve each result's `source_id` and `path` in the generated answer.
+- Resolve a model/SKU or option combination before generating a variant page. Treat `ambiguous` as a selection request, not as permission to choose a sibling variant.

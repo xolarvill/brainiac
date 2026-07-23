@@ -12,10 +12,10 @@ Use source documents from `products/<product_id>/raw/`, fill structured product 
 
 Update SKU `<sku_id>` for product `<product_id>`.
 
-Change only SKU-level fields in `variants.yaml` unless the fact applies to every variant. Check media references and rerun validation.
+Change only SKU-level options, identifiers, attributes, or media refs in `variants.yaml` unless the fact applies to every variant. Resolve the resulting variant combination and rerun validation.
 
 ## Customer Support Context
 
 Generate customer-support context for product `<product_id>` and optional SKU `<sku_id>`.
 
-Use only repository source files. Include claim boundaries, forbidden claims, care instructions, variant facts, and source file references. If the answer requires medical, veterinary, legal, or unsupported claims, say what is missing instead.
+Use only repository source files. Include claim boundaries, product-specific instructions, resolved variant facts, option values, and source file references. If the answer requires an unsupported claim, say what is missing instead.

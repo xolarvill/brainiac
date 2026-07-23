@@ -48,7 +48,7 @@ UV_CACHE_DIR=.uv-cache uv run python scripts/check_conflicts.py
 ## Fact Placement
 
 - Product-wide facts go in `product.yaml`.
-- SKU-specific dimensions, colors, weight ranges, package facts, and media refs go in `variants.yaml`.
+- SKU-specific options, identifiers, attributes, package facts, source refs, and media refs go in `variants.yaml`.
 - Claims and boundaries go in `product.yaml` and `compliance.md`.
 - Raw source files go in `products/<product_id>/raw/`; unresolved evidence and human judgment go in `source-notes.md`.
 - Media files stay under `media/`; agents consume asset IDs and transcripts.

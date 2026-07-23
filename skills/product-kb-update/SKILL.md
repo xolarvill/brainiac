@@ -36,9 +36,9 @@ UV_CACHE_DIR=.uv-cache uv run python scripts/export_shopify.py
 
 ## Safe Update Patterns
 
-- Dimensions: update `variants.yaml`, then search Markdown and exports for old values.
+- Variant options and attributes: update `variants.yaml`, then search Markdown and exports for stale values.
 - Claims: update `claims_allowed`, `claims_need_evidence`, `claims_forbidden`, `compliance.md`, and `source-notes.md` together.
-- Washing/care: update `product.yaml`, `care-guide.md`, FAQ, and support context exports.
+- Product-specific care: update `product.yaml`, the relevant Markdown module, and support context exports.
 - Media: add or change files under `media/`, update `media.yaml`, and verify all `media_refs`.
 - Variant add: prefer `scripts/new_variant.py` unless the SKU shape requires manual fields.
 

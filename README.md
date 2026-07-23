@@ -12,7 +12,7 @@ Product knowledge is treated as a version-controlled business asset. YAML, JSON,
 ## Architecture
 
 - Product facts: `products/<product_id>/product.yaml`
-- Variant/SKU facts: `products/<product_id>/variants.yaml`
+- Variant axes and SKU/model facts: `products/<product_id>/variants.yaml`
 - Raw source inventory: `products/<product_id>/sources.yaml`
 - Human-readable modules: Markdown files beside each product.
 - Media metadata: `products/<product_id>/media/media.yaml`
@@ -25,8 +25,8 @@ Product knowledge is treated as a version-controlled business asset. YAML, JSON,
 
 ```bash
 cd template
-uv run python scripts/new_product.py orthopedic-dog-bed
-uv run python scripts/ingest_sources.py orthopedic-dog-bed /path/to/source-folder
+uv run python scripts/new_product.py <product-slug>
+uv run python scripts/ingest_sources.py <product-id> /path/to/source-folder
 uv run python scripts/validate.py
 uv run python scripts/check_conflicts.py
 uv run python scripts/build_index.py
@@ -61,7 +61,7 @@ Recommended product folder layout:
 
 ```text
 products/
-  orthopedic-dog-bed/
+  <product-id>/
     raw/
       supplier-docs/
       competitor-pages/
@@ -76,14 +76,14 @@ Drop supplier PDFs, copied product specs, review exports, support transcripts, i
 Then ask Codex:
 
 ```text
-$product-kb-accumulate ingest products/orthopedic-dog-bed/raw into products/orthopedic-dog-bed
+$product-kb-accumulate ingest products/<product-id>/raw into products/<product-id>
 ```
 
 For a repeatable local import, use the repository command. It copies an optional file/folder into `raw/imported/`, records every raw file in `sources.yaml`, and rebuilds the SQLite index:
 
 ```bash
 cd template
-uv run python scripts/ingest_sources.py orthopedic-dog-bed /path/to/source-folder
+uv run python scripts/ingest_sources.py <product-id> /path/to/source-folder
 ```
 
 Markdown, text, CSV, JSON, YAML, and HTML sources are searchable immediately. Images, video, and PDFs are retained and tracked in `sources.yaml` until a media/OCR/PDF extractor is added.
@@ -91,18 +91,18 @@ Markdown, text, CSV, JSON, YAML, and HTML sources are searchable immediately. Im
 Codex should read the source files from disk, extract facts, and write the source of truth into:
 
 ```text
-products/orthopedic-dog-bed/product.yaml
-products/orthopedic-dog-bed/variants.yaml
-products/orthopedic-dog-bed/*.md
-products/orthopedic-dog-bed/golden-qa.yaml
-products/orthopedic-dog-bed/media/media.yaml
+products/<product-id>/product.yaml
+products/<product-id>/variants.yaml
+products/<product-id>/*.md
+products/<product-id>/golden-qa.yaml
+products/<product-id>/media/media.yaml
 ```
 
 Use chat for judgment and direction:
 
 ```text
-$product-kb-update update ODB-GREY-L dimensions from products/orthopedic-dog-bed/raw/supplier-docs/2026-size-sheet.pdf
-$product-kb-update add the new washing limitation from products/orthopedic-dog-bed/raw/customer-support/june-tickets.md
+$product-kb-update update MODEL-001 options from products/<product-id>/raw/supplier-docs/2026-spec-sheet.pdf
+$product-kb-update add a source-backed product fact from products/<product-id>/raw/customer-support/june-tickets.md
 ```
 
 Brainiac's job is to grill raw source folders into durable product knowledge files. It should not treat the conversation context as the knowledge store.
@@ -114,6 +114,7 @@ Potential consuming agents should start with `template/ACCESS.md` after a repo i
 - Direct file agents read `products/<product_id>/product.yaml`, `variants.yaml`, Markdown modules, `golden-qa.yaml`, and `media/media.yaml`.
 - API agents call `/products`, `/products/{product_id}`, `/products/{product_id}/variants`, `/products/{product_id}/media`, `/context/*`, and `/search`.
 - Downstream agents can call `/products/{product_id}/sources` for source metadata and `/search?q=...&product_id=...` for evidence snippets with `source_id` and `path`.
+- For multi-variant pages, resolve a model/SKU or option combination first; an ambiguous result must remain a selection request.
 - Neither type should treat `products/<product_id>/raw/` as official product knowledge. Raw files are evidence for maintenance and accumulation.
 
 ## Skill And Plugin Packaging

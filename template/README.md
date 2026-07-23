@@ -27,7 +27,7 @@ Recommended layout:
 
 ```text
 products/
-  orthopedic-dog-bed/
+  <product-id>/
     raw/
       supplier-docs/
       competitor-pages/
@@ -40,8 +40,8 @@ products/
 Examples:
 
 ```text
-$product-kb-accumulate ingest products/orthopedic-dog-bed/raw into products/orthopedic-dog-bed
-$product-kb-update update ODB-GREY-L using products/orthopedic-dog-bed/raw/supplier-docs/2026-size-sheet.pdf
+$product-kb-accumulate ingest products/<product-id>/raw into products/<product-id>
+$product-kb-update update MODEL-001 using products/<product-id>/raw/supplier-docs/2026-spec-sheet.pdf
 ```
 
 After Codex reads the source files, durable facts should be written into `products/<product_id>/`. Keep unresolved or weak evidence in `source-notes.md`.
@@ -55,8 +55,9 @@ uv sync --extra dev
 ## Common Commands
 
 ```bash
-uv run python scripts/new_product.py orthopedic-dog-bed
-uv run python scripts/ingest_sources.py orthopedic-dog-bed /path/to/source-folder
+uv run python scripts/new_product.py <product-slug>
+uv run python scripts/ingest_sources.py <product-id> /path/to/source-folder
+uv run python scripts/new_variant.py <product-id> <sku-id> --option option_name=value
 uv run python scripts/validate.py
 uv run python scripts/check_conflicts.py
 uv run python scripts/build_index.py
@@ -68,6 +69,8 @@ uv run pytest
 The scripts also work as plain `python scripts/...` commands inside an activated uv-managed environment.
 
 `ingest_sources.py` optionally copies a file or folder into `raw/imported/`, writes `sources.yaml`, and rebuilds `indexes/product_kb.sqlite`. It never edits curated product facts. Text, table, structured-data, and HTML files are searchable; binary files are inventoried but not extracted.
+
+For multi-variant products, use `variant_axes` and each variant's `options`, `model_number`, and `aliases`. Resolve a selected model through `POST /products/{product_id}/variants/resolve` before generating a variant-specific page.
 
 ## Agent Guidance
 
@@ -86,5 +89,5 @@ Example request:
 ```bash
 curl -X POST http://127.0.0.1:8710/context/customer-support \
   -H 'Content-Type: application/json' \
-  -d '{"product_id":"example-orthopedic-dog-bed","sku_id":"ODB-GREY-L","customer_question":"Can this bed help my old dog with arthritis?","language":"en","channel":"shopify_chat"}'
+  -d '{"product_id":"<product-id>","variant_options":{"option_name":"value"},"customer_question":"What should I know about this product?","language":"en","channel":"support"}'
 ```
