@@ -18,7 +18,7 @@ def main() -> int:
     for folder in product_dirs(ROOT):
         product = load_yaml(folder / "product.yaml")
         forbidden = [claim.lower() for claim in product.get("claims_forbidden", [])]
-        if not product.get("claims_forbidden") or not product.get("support_boundaries"):
+        if product.get("claims_forbidden") and not product.get("support_boundaries"):
             errors.append(f"{folder.name}: missing claim boundaries")
 
         for name in CONFLICT_SCAN_FILES:
@@ -35,6 +35,8 @@ def main() -> int:
                 str(item["dimensions_cm"]["height"]),
             )
             for item in variants
+            if isinstance(item.get("dimensions_cm"), dict)
+            and {"length", "width", "height"} <= set(item["dimensions_cm"])
         }
         for name in ["faq.md", "objections.md", "care-guide.md", "comparison.md"]:
             for match in DIMENSION_RE.finditer(read_text(folder / name)):

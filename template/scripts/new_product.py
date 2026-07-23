@@ -13,7 +13,7 @@ from kb import load_yaml, write_yaml
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Create a product folder from products/_template.")
-    parser.add_argument("slug", help="Product slug, e.g. orthopedic-dog-bed")
+    parser.add_argument("slug", help="Product slug, e.g. my-product")
     parser.add_argument("--name", help="Human-readable product name")
     args = parser.parse_args()
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import sqlite3
 from pathlib import Path
 from typing import Any
@@ -49,7 +50,8 @@ CONFLICT_SCAN_FILES = [
 
 def load_yaml(path: Path) -> Any:
     with path.open("r", encoding="utf-8") as handle:
-        return yaml.safe_load(handle) or {}
+        data = yaml.safe_load(handle)
+    return {} if data is None else data
 
 
 def write_yaml(path: Path, data: Any) -> None:
@@ -79,9 +81,121 @@ def load_product(product_id: str, root: Path = ROOT) -> dict[str, Any]:
     return load_yaml(product_dir(product_id, root) / "product.yaml")
 
 
+def load_variant_data(product_id: str, root: Path = ROOT) -> dict[str, Any]:
+    return load_yaml(product_dir(product_id, root) / "variants.yaml")
+
+
 def load_variants(product_id: str, root: Path = ROOT) -> list[dict[str, Any]]:
-    data = load_yaml(product_dir(product_id, root) / "variants.yaml")
+    data = load_variant_data(product_id, root)
     return data.get("variants", [])
+
+
+def load_variant_axes(product_id: str, root: Path = ROOT) -> list[dict[str, Any]]:
+    return load_variant_data(product_id, root).get("variant_axes", [])
+
+
+def normalize_identifier(value: Any) -> str:
+    return re.sub(r"[^a-z0-9]+", "", str(value).lower())
+
+
+def normalize_option_key(value: Any) -> str:
+    return re.sub(r"[^a-z0-9]+", "_", str(value).lower()).strip("_")
+
+
+def normalize_option_value(value: Any) -> str:
+    return re.sub(r"\s+", "", str(value).lower())
+
+
+def option_values_match(stored: Any, requested: Any, axis: dict[str, Any] | None = None) -> bool:
+    stored_value = normalize_option_value(stored)
+    requested_value = normalize_option_value(requested)
+    if stored_value == requested_value:
+        return True
+    unit = normalize_option_value((axis or {}).get("unit", ""))
+    return bool(unit) and (
+        stored_value + unit == requested_value or requested_value + unit == stored_value
+    )
+
+
+def variant_options(variant: dict[str, Any], axes: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+    options = dict(variant.get("options", {}))
+    for axis in axes or []:
+        key = axis.get("key")
+        if key and key not in options and key in variant:
+            options[key] = variant[key]
+    return options
+
+
+def variant_identifier_values(variant: dict[str, Any]) -> list[str]:
+    values: list[str] = []
+    for key in ["variant_id", "sku_id", "model_number"]:
+        if variant.get(key):
+            values.append(str(variant[key]))
+    aliases = variant.get("aliases", [])
+    values.extend(str(value) for value in aliases if value)
+    for value in variant.get("identifiers", {}).values():
+        if isinstance(value, list):
+            values.extend(str(item) for item in value if item)
+        elif value:
+            values.append(str(value))
+    return values
+
+
+def resolve_variant(
+    product_id: str,
+    identifier: str | None = None,
+    options: dict[str, Any] | None = None,
+    root: Path = ROOT,
+) -> dict[str, Any]:
+    variants = load_variants(product_id, root)
+    axes = load_variant_axes(product_id, root)
+    candidates = variants
+    axes_by_key = {normalize_option_key(axis.get("key")): axis for axis in axes if axis.get("key")}
+
+    if identifier:
+        needle = normalize_identifier(identifier)
+        candidates = [
+            variant
+            for variant in variants
+            if needle and any(normalize_identifier(value) == needle for value in variant_identifier_values(variant))
+        ]
+
+    axis_aliases: dict[str, str] = {}
+    for axis in axes:
+        canonical_key = normalize_option_key(axis.get("key"))
+        axis_aliases[canonical_key] = canonical_key
+        axis_aliases.update({normalize_option_key(alias): canonical_key for alias in axis.get("aliases", [])})
+    requested_options = {
+        axis_aliases.get(normalize_option_key(key), normalize_option_key(key)): value
+        for key, value in (options or {}).items()
+    }
+    if requested_options:
+        candidates = [
+            variant
+            for variant in candidates
+            if all(
+                option_values_match(variant_options(variant, axes).get(key), value, axes_by_key.get(key))
+                for key, value in requested_options.items()
+            )
+        ]
+
+    if not identifier and not requested_options:
+        status = "not_selected" if variants else "not_found"
+    elif len(candidates) == 1:
+        status = "matched"
+    elif candidates:
+        status = "ambiguous"
+    else:
+        status = "not_found"
+
+    return {
+        "status": status,
+        "selected_variant": candidates[0] if status == "matched" else None,
+        "matches": candidates,
+        "variant_axes": axes,
+        "requested_identifier": identifier,
+        "requested_options": requested_options,
+    }
 
 
 def load_media(product_id: str, root: Path = ROOT) -> dict[str, Any]:
@@ -153,23 +267,24 @@ def build_customer_support_context(
     customer_question: str | None = None,
 ) -> dict[str, Any]:
     product = load_product(product_id, root)
+    variant = find_variant(product_id, sku_id, root)
     return {
         "product_id": product_id,
         "sku_id": sku_id,
         "relevant_facts": [
             {"product_name": product.get("product_name")},
             {"common_facts": product.get("common_facts", {})},
-            {"materials": product.get("materials", {})},
-            {"washing": product.get("washing", {})},
+            {"attributes": product.get("attributes", {})},
         ],
-        "variant_facts": find_variant(product_id, sku_id, root),
+        "variant_facts": variant,
+        "variant_options": variant_options(variant, load_variant_axes(product_id, root)),
         "care_instructions": read_text(product_dir(product_id, root) / "care-guide.md").splitlines(),
         "claim_boundaries": {
             "allowed": product.get("claims_allowed", []),
             "need_evidence": product.get("claims_need_evidence", []),
             "forbidden": product.get("claims_forbidden", []),
         },
-        "suggested_answer_style": "helpful, cautious, non-medical",
+        "suggested_answer_style": product.get("answer_style", "clear, source-backed, cautious"),
         "must_not_say": product.get("claims_forbidden", []),
         "golden_qa": load_golden_qa(product_id, root),
         "retrieved_evidence": index_search(customer_question, root, product_id) if customer_question else [],

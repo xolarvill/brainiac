@@ -1,3 +1,11 @@
+variant_axes:
+  - key: size
+    label: Size
+    value_type: string
+  - key: color
+    label: Color
+    value_type: string
+
 variants:
   - sku_id: ODB-GREY-M
     size: M
@@ -22,6 +30,9 @@ variants:
     media_refs:
       - img_grey_m_main
       - img_size_chart
+    options:
+      size: M
+      color: Grey
 
   - sku_id: ODB-GREY-L
     size: L
@@ -48,6 +59,9 @@ variants:
       - img_grey_l_main
       - img_size_chart
       - video_washing_demo
+    options:
+      size: L
+      color: Grey
 
   - sku_id: ODB-GREY-XL
     size: XL
@@ -72,3 +86,6 @@ variants:
     media_refs:
       - img_grey_xl_main
       - img_size_chart
+    options:
+      size: XL
+      color: Grey

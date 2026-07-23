@@ -10,7 +10,14 @@ from jsonschema import Draft202012Validator
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from kb import RAW_SOURCE_DIRS, REQUIRED_PRODUCT_FILES, load_yaml, product_dirs
+from kb import (
+    RAW_SOURCE_DIRS,
+    REQUIRED_PRODUCT_FILES,
+    load_yaml,
+    product_dirs,
+    variant_identifier_values,
+    variant_options,
+)
 
 
 def validate_schema(data: object, schema_path: Path) -> list[str]:
@@ -59,6 +66,29 @@ def validate_product(folder: Path) -> list[str]:
     duplicates = sorted({sku_id for sku_id in sku_ids if sku_ids.count(sku_id) > 1})
     for sku_id in duplicates:
         errors.append(f"{folder.name}: duplicate sku_id {sku_id}")
+
+    axes = load_yaml(folder / "variants.yaml").get("variant_axes", [])
+    axis_keys = [axis.get("key") for axis in axes]
+    for key in sorted({key for key in axis_keys if key and axis_keys.count(key) > 1}):
+        errors.append(f"{folder.name}: duplicate variant axis {key}")
+    declared_axes = {key for key in axis_keys if key}
+    identifiers: dict[str, str] = {}
+    for variant in variants:
+        if variant.get("parent_product_id") and variant["parent_product_id"] != folder.name:
+            errors.append(f"{folder.name}: variant {variant.get('sku_id')} has wrong parent_product_id")
+        options = variant_options(variant, axes)
+        if declared_axes and set(options) - declared_axes:
+            extra = sorted(set(options) - declared_axes)
+            errors.append(f"{folder.name}: {variant.get('sku_id')} uses undeclared variant axes: {', '.join(extra)}")
+        missing = sorted(declared_axes - set(options))
+        if missing:
+            errors.append(f"{folder.name}: {variant.get('sku_id')} is missing variant axes: {', '.join(missing)}")
+        for identifier in variant_identifier_values(variant):
+            normalized = "".join(character for character in identifier.lower() if character.isalnum())
+            previous = identifiers.get(normalized)
+            if previous and previous != variant.get("sku_id"):
+                errors.append(f"{folder.name}: duplicate variant identifier {identifier}")
+            identifiers[normalized] = str(variant.get("sku_id"))
 
     source_records = load_yaml(folder / "sources.yaml").get("sources", [])
     source_ids = [record.get("source_id") for record in source_records]

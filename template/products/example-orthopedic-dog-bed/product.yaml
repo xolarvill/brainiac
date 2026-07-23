@@ -3,6 +3,8 @@ product_name: Orthopedic Dog Bed
 category: pet_beds
 market: US
 status: active
+product_level: family
+answer_style: helpful, cautious, non-medical
 
 brand_positioning:
   price_tier: mid_high
