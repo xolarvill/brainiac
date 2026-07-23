@@ -13,6 +13,7 @@ Product knowledge is treated as a version-controlled business asset. YAML, JSON,
 
 - Product facts: `products/<product_id>/product.yaml`
 - Variant/SKU facts: `products/<product_id>/variants.yaml`
+- Raw source inventory: `products/<product_id>/sources.yaml`
 - Human-readable modules: Markdown files beside each product.
 - Media metadata: `products/<product_id>/media/media.yaml`
 - Media files: stored under product `media/` folders.
@@ -25,6 +26,7 @@ Product knowledge is treated as a version-controlled business asset. YAML, JSON,
 ```bash
 cd template
 uv run python scripts/new_product.py orthopedic-dog-bed
+uv run python scripts/ingest_sources.py orthopedic-dog-bed /path/to/source-folder
 uv run python scripts/validate.py
 uv run python scripts/check_conflicts.py
 uv run python scripts/build_index.py
@@ -77,6 +79,15 @@ Then ask Codex:
 $product-kb-accumulate ingest products/orthopedic-dog-bed/raw into products/orthopedic-dog-bed
 ```
 
+For a repeatable local import, use the repository command. It copies an optional file/folder into `raw/imported/`, records every raw file in `sources.yaml`, and rebuilds the SQLite index:
+
+```bash
+cd template
+uv run python scripts/ingest_sources.py orthopedic-dog-bed /path/to/source-folder
+```
+
+Markdown, text, CSV, JSON, YAML, and HTML sources are searchable immediately. Images, video, and PDFs are retained and tracked in `sources.yaml` until a media/OCR/PDF extractor is added.
+
 Codex should read the source files from disk, extract facts, and write the source of truth into:
 
 ```text
@@ -102,6 +113,7 @@ Potential consuming agents should start with `template/ACCESS.md` after a repo i
 
 - Direct file agents read `products/<product_id>/product.yaml`, `variants.yaml`, Markdown modules, `golden-qa.yaml`, and `media/media.yaml`.
 - API agents call `/products`, `/products/{product_id}`, `/products/{product_id}/variants`, `/products/{product_id}/media`, `/context/*`, and `/search`.
+- Downstream agents can call `/products/{product_id}/sources` for source metadata and `/search?q=...&product_id=...` for evidence snippets with `source_id` and `path`.
 - Neither type should treat `products/<product_id>/raw/` as official product knowledge. Raw files are evidence for maintenance and accumulation.
 
 ## Skill And Plugin Packaging

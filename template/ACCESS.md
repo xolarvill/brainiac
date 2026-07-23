@@ -7,6 +7,7 @@ This repository is the source of truth for product knowledge. Consuming agents c
 - Treat YAML, Markdown, `golden-qa.yaml`, and `media/media.yaml` as source truth.
 - Treat `indexes/` and `exports/` as derived artifacts.
 - Treat `products/<product_id>/raw/` as evidence only, not official product knowledge.
+- Treat `products/<product_id>/sources.yaml` as the machine-readable inventory of raw evidence.
 - Do not make claims listed in `claims_forbidden`.
 - Do not present `claims_need_evidence` as proven unless a source file supports it.
 - Prefer media transcripts and metadata over raw video files.
@@ -25,6 +26,7 @@ products/<product_id>/compliance.md
 products/<product_id>/comparison.md
 products/<product_id>/golden-qa.yaml
 products/<product_id>/media/media.yaml
+products/<product_id>/sources.yaml
 ```
 
 Use `source-notes.md` for evidence gaps, unresolved questions, and human judgment.
@@ -45,11 +47,12 @@ GET  /products
 GET  /products/{product_id}
 GET  /products/{product_id}/variants
 GET  /products/{product_id}/media
+GET  /products/{product_id}/sources
 POST /context/customer-support
 POST /context/listing
 POST /context/ad-copy
 POST /context/seo
-GET  /search?q=...
+GET  /search?q=...&product_id=...
 ```
 
 Context request shape:
@@ -69,3 +72,4 @@ Context request shape:
 - Use direct files when an agent can work inside the repo and needs full traceability.
 - Use FastAPI when another local tool or agent needs a stable interface.
 - Use exports when the consumer only needs a reproducible context bundle.
+- Use `/search` when the consumer needs source-backed snippets; preserve each result's `source_id` and `path` in the generated answer.

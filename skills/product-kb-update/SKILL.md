@@ -10,14 +10,15 @@ Update product knowledge without weakening source truth or claim boundaries.
 ## Workflow
 
 1. Read `AGENT.md` and identify the affected product folder.
-2. Decide the fact level:
+2. If raw material was added or replaced, run `scripts/ingest_sources.py` first so `sources.yaml` and the index match disk.
+3. Decide the fact level:
    - SPU/common fact: edit `product.yaml`
    - SKU fact: edit `variants.yaml`
    - media fact: edit `media/media.yaml` and transcript files
    - support/copy explanation: edit Markdown modules after structured facts
-3. Search related files before changing a fact so stale dimensions or claims do not survive.
-4. Update `source-notes.md` with the reason, source, or unresolved gap.
-5. Run:
+4. Search related files before changing a fact so stale dimensions or claims do not survive.
+5. Update `source-notes.md` with the reason, source, or unresolved gap.
+6. Run:
 
 ```bash
 UV_CACHE_DIR=.uv-cache uv run python scripts/validate.py
@@ -25,7 +26,7 @@ UV_CACHE_DIR=.uv-cache uv run python scripts/check_conflicts.py
 UV_CACHE_DIR=.uv-cache uv run pytest
 ```
 
-6. Rebuild derived artifacts only after validation passes:
+7. Rebuild derived artifacts only after validation passes:
 
 ```bash
 UV_CACHE_DIR=.uv-cache uv run python scripts/build_index.py

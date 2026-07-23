@@ -11,6 +11,7 @@ YAML, Markdown, media manifests, and source files are the source of truth. Index
 - `products/<product_id>/*.md`: human-readable knowledge modules.
 - `products/<product_id>/media/media.yaml`: media asset manifest.
 - `products/<product_id>/raw/`: raw source files for that product.
+- `products/<product_id>/sources.yaml`: hashed inventory of imported raw files.
 - `schemas/`: JSON schemas used by validation.
 - `scripts/`: local maintenance, validation, indexing, and export scripts.
 - `api/`: optional FastAPI service.
@@ -55,6 +56,7 @@ uv sync --extra dev
 
 ```bash
 uv run python scripts/new_product.py orthopedic-dog-bed
+uv run python scripts/ingest_sources.py orthopedic-dog-bed /path/to/source-folder
 uv run python scripts/validate.py
 uv run python scripts/check_conflicts.py
 uv run python scripts/build_index.py
@@ -64,6 +66,8 @@ uv run pytest
 ```
 
 The scripts also work as plain `python scripts/...` commands inside an activated uv-managed environment.
+
+`ingest_sources.py` optionally copies a file or folder into `raw/imported/`, writes `sources.yaml`, and rebuilds `indexes/product_kb.sqlite`. It never edits curated product facts. Text, table, structured-data, and HTML files are searchable; binary files are inventoried but not extracted.
 
 ## Agent Guidance
 

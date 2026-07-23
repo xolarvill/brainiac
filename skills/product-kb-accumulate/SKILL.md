@@ -17,11 +17,19 @@ Turn source folders into source-backed product knowledge files. Do not ask the u
 UV_CACHE_DIR=.uv-cache uv run python scripts/new_product.py <product-slug>
 ```
 
-4. Write structured facts first:
+4. Register and index local source files before extracting facts:
+
+```bash
+UV_CACHE_DIR=.uv-cache uv run python scripts/ingest_sources.py <product_id> [source-file-or-folder]
+```
+
+This writes `sources.yaml` with file hashes and indexes readable source files. It does not replace source-backed fact extraction; agents still decide which facts are official.
+
+5. Write structured facts first:
    - SPU/common facts in `products/<product_id>/product.yaml`
    - SKU/variant facts in `products/<product_id>/variants.yaml`
    - media metadata in `products/<product_id>/media/media.yaml`
-5. Then write human-readable modules:
+6. Then write human-readable modules:
    - `faq.md`
    - `objections.md`
    - `care-guide.md`
@@ -29,8 +37,8 @@ UV_CACHE_DIR=.uv-cache uv run python scripts/new_product.py <product-slug>
    - `comparison.md`
    - `source-notes.md`
    - `golden-qa.yaml`
-6. Record uncertainty in `source-notes.md`; do not fabricate missing facts.
-7. Validate:
+7. Record uncertainty in `source-notes.md`; do not fabricate missing facts.
+8. Validate:
 
 ```bash
 UV_CACHE_DIR=.uv-cache uv run python scripts/validate.py

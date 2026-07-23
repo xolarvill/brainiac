@@ -6,6 +6,7 @@ This repository stores product knowledge as version-controlled source files.
 
 - `products/` contains one folder per product.
 - `products/<product_id>/raw/` stores raw or lightly processed source material for that product.
+- `products/<product_id>/sources.yaml` records the raw files' hashes and searchability.
 - `indexes/` stores derived SQLite/search indexes.
 - `exports/` stores derived agent contexts and channel snippets.
 - `api/` exposes an optional local service over the same source files.
@@ -52,6 +53,7 @@ Read source files from disk. Do not ask users to paste large raw documents into 
 
 ```bash
 uv run python scripts/new_product.py orthopedic-dog-bed
+uv run python scripts/ingest_sources.py orthopedic-dog-bed /path/to/source-folder
 uv run python scripts/new_variant.py example-orthopedic-dog-bed ODB-GREY-S --size S --color Grey --length-cm 60 --width-cm 45 --height-cm 14 --min-weight-kg 3 --max-weight-kg 8
 uv run python scripts/validate.py
 uv run python scripts/check_conflicts.py

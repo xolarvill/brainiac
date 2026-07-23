@@ -21,6 +21,7 @@ Use this reference for cross-cutting product knowledge tasks that do not fit onl
 
 - `product.yaml`: SPU-level facts shared by all SKUs.
 - `variants.yaml`: SKU facts such as size, color, dimensions, package details, and media refs.
+- `sources.yaml`: hashed inventory of raw evidence files; raw files remain the evidence source.
 - Markdown modules: FAQ, objections, care, compliance, comparison, and source context.
 - `media/media.yaml`: media metadata; product text should reference asset IDs, not embed files.
 - `golden-qa.yaml`: evaluation questions and expected answer policies.
@@ -49,6 +50,12 @@ Initialize:
 UV_CACHE_DIR=.uv-cache uv sync --extra dev
 UV_CACHE_DIR=.uv-cache uv run python scripts/validate.py
 UV_CACHE_DIR=.uv-cache uv run pytest
+```
+
+Import and index local source files:
+
+```bash
+UV_CACHE_DIR=.uv-cache uv run python scripts/ingest_sources.py <product_id> [source-file-or-folder]
 ```
 
 Validate:
