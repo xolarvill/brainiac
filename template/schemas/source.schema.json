@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["sources"],
+  "properties": {
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "path",
+          "kind",
+          "mime_type",
+          "sha256",
+          "size_bytes",
+          "readable",
+          "modified_at"
+        ],
+        "properties": {
+          "source_id": { "type": "string", "pattern": "^src_[a-f0-9]{12}$" },
+          "path": { "type": "string", "pattern": "^raw/[^.].*" },
+          "kind": { "type": "string", "minLength": 1 },
+          "mime_type": { "type": "string", "minLength": 1 },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "size_bytes": { "type": "integer", "minimum": 0 },
+          "readable": { "type": "boolean" },
+          "modified_at": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}

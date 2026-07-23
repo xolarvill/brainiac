@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import sys
 from pathlib import Path
 
@@ -32,6 +33,7 @@ def validate_product(folder: Path) -> list[str]:
         "variants.yaml": "variants.schema.json",
         "media/media.yaml": "media.schema.json",
         "golden-qa.yaml": "golden-qa.schema.json",
+        "sources.yaml": "source.schema.json",
     }
     for data_file, schema_file in schema_map.items():
         path = folder / data_file
@@ -57,6 +59,26 @@ def validate_product(folder: Path) -> list[str]:
     duplicates = sorted({sku_id for sku_id in sku_ids if sku_ids.count(sku_id) > 1})
     for sku_id in duplicates:
         errors.append(f"{folder.name}: duplicate sku_id {sku_id}")
+
+    source_records = load_yaml(folder / "sources.yaml").get("sources", [])
+    source_ids = [record.get("source_id") for record in source_records]
+    source_paths = [record.get("path") for record in source_records]
+    for value, label in [(source_ids, "source_id"), (source_paths, "source path")]:
+        duplicates = sorted({item for item in value if item and value.count(item) > 1})
+        for item in duplicates:
+            errors.append(f"{folder.name}: duplicate {label} {item}")
+    for record in source_records:
+        relative = record.get("path", "")
+        path = folder / relative
+        if not relative.startswith("raw/") or ".." in Path(relative).parts:
+            errors.append(f"{folder.name}: source path must stay under raw/: {relative}")
+            continue
+        if not path.is_file():
+            errors.append(f"{folder.name}: missing source file {relative}")
+            continue
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        if digest != record.get("sha256"):
+            errors.append(f"{folder.name}: source changed since ingest, rerun scripts/ingest_sources.py: {relative}")
 
     return errors
 
